@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt;
+package com.example.taek.blescanner_bylyt.Utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;

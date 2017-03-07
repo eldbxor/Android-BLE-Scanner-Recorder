@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt;
+package com.example.taek.blescanner_bylyt.Services;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -11,14 +11,18 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
-import android.provider.Settings;
+import android.os.Messenger;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.taek.blescanner_bylyt.Utils.BLEServiceUtils;
+import com.example.taek.blescanner_bylyt.Utils.Constants;
+import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class BLEScanService extends Service {
     private ScanSettings mScanSetting;
@@ -27,6 +31,8 @@ public class BLEScanService extends Service {
     private BLEServiceUtils mBLEServiceUtils;
     private Context serviceContext;
 
+    // Target we publish for clients to send messages to IncomingHandler.
+    private Messenger incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_SERVICE, BLEScanService.this));
 
     public BLEScanService() {
     }
@@ -68,13 +74,25 @@ public class BLEScanService extends Service {
 
     }
 
-    public void scanLeDevice(final boolean enable){
+    public void scanBLEDevice(final boolean enable){
         if(enable){
             if(Build.VERSION.SDK_INT < 21){
                 // 롤리팝 이전버전
                 mBLEServiceUtils.mBluetoothAdapter.startLeScan(mLeScanCallback);
             }else{
-                mBLEServiceUtils.mBLEScanner.startScan(mScanFilter, mScanSetting, mScanCallback);
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (Build.VERSION.SDK_INT >= 21)
+                                mBLEServiceUtils.mBLEScanner.startScan(null, mScanSetting, mScanCallback);
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                handler.postDelayed(runnable, 5000);
             }
         }else{
             if(Build.VERSION.SDK_INT < 21){
@@ -94,9 +112,9 @@ public class BLEScanService extends Service {
             } else {
                 Log.d(TAG, "restartScan(): change scanMode");
                 mScanSetting = null;
-                scanLeDevice(false);
+                scanBLEDevice(false);
                 mScanSetting = mBLEServiceUtils.setPeriod(scanMode);
-                scanLeDevice(true);
+                scanBLEDevice(true);
             }
         }
     }
@@ -170,8 +188,8 @@ public class BLEScanService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        Log.d(TAG, "onBind()");
+        return incomingMessenger.getBinder();
     }
 
     @Override
