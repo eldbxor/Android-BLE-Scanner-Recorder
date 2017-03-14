@@ -59,6 +59,7 @@ public class BLEScanService extends Service {
 
         if(mBLEServiceUtils.mBluetoothAdapter != null){ // && mBluetoothAdapter.isEnabled()){
             if(Build.VERSION.SDK_INT >= 21){
+                Log.d(TAG, "onCreate(): BLEScanner setting");
                 mBLEServiceUtils.mBLEScanner = mBLEServiceUtils.mBluetoothAdapter.getBluetoothLeScanner();
                 mScanSetting = mBLEServiceUtils.setPeriod(ScanSettings.SCAN_MODE_LOW_LATENCY);
                 mScanFilter = new ArrayList<ScanFilter>();
@@ -80,19 +81,7 @@ public class BLEScanService extends Service {
                 // 롤리팝 이전버전
                 mBLEServiceUtils.mBluetoothAdapter.startLeScan(mLeScanCallback);
             }else{
-                Handler handler = new Handler();
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (Build.VERSION.SDK_INT >= 21)
-                                mBLEServiceUtils.mBLEScanner.startScan(null, mScanSetting, mScanCallback);
-                        } catch (IllegalArgumentException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                handler.postDelayed(runnable, 5000);
+                mBLEServiceUtils.mBLEScanner.startScan(null, mScanSetting, mScanCallback);
             }
         }else{
             if(Build.VERSION.SDK_INT < 21){

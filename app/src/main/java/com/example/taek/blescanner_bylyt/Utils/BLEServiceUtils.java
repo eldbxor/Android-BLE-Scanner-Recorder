@@ -204,7 +204,7 @@ public class BLEServiceUtils {
         ScanSettings settings = null;
 
         if(Build.VERSION.SDK_INT >= 21){
-            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 settings = new ScanSettings.Builder()
                         .setScanMode(scanMode)
                         .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)

@@ -1,7 +1,6 @@
 package com.example.taek.blescanner_bylyt.UI;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,8 +16,10 @@ import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.taek.blescanner_bylyt.R;
 import com.example.taek.blescanner_bylyt.Services.BLEScanService;
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private Messenger incomingMessenger;
     private ServiceConnection mServiceConnection;
     private Messenger mMessenger;
-    private Switch BLEScanSwitch;
+    private Switch switch_scan;
+    private TextView editView_saveData;
+    private CheckBox checkbox_dataName;
 
     private void connectMessenger() {
         Log.d(TAG, "connectMessenger(): call connectMessenger");
@@ -60,7 +63,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BLEScanSwitch = (Switch) findViewById(R.id.BLEScanSwitch);
+        switch_scan = (Switch) findViewById(R.id.BLEScanSwitch);
+        editView_saveData = (TextView) findViewById(R.id.editView_dataName);
+        checkbox_dataName = (CheckBox) findViewById(R.id.checkBox_saveData);
+        editView_saveData.setEnabled(false);
 
         // BLE 관련 Permission 주기
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -86,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        BLEScanSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switch_scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Switch on
@@ -108,6 +114,20 @@ public class MainActivity extends AppCompatActivity {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        });
+
+        checkbox_dataName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // checkBox is checked
+                if (isChecked) {
+                    editView_saveData.setEnabled(true);
+                }
+                // checkBox isn't checked
+                else {
+                    editView_saveData.setEnabled(false);
                 }
             }
         });
@@ -146,5 +166,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mainActiviyContext.unbindService(mServiceConnection);
     }
 }
