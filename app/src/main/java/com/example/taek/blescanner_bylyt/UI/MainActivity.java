@@ -2,6 +2,7 @@ package com.example.taek.blescanner_bylyt.UI;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,9 +14,11 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -26,7 +29,7 @@ import com.example.taek.blescanner_bylyt.Services.BLEScanService;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
 import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Context mainActiviyContext = this;
     private String TAG = "MainActiviy";
     private Messenger incomingMessenger;
@@ -161,6 +164,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+
+    private MainFragment fragMain;
+
+    private NavigationView navigationView;
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        FragmentManager fragmentManager = getFragmentManager();
+        int id = item.getItemId();
+
+        switch (id) {
+            case 1:
+                break;
+        }
+
+        return true;
     }
 
     @Override
