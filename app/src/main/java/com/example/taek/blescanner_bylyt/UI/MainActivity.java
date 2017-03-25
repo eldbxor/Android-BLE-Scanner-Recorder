@@ -15,10 +15,16 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -26,10 +32,15 @@ import android.widget.TextView;
 
 import com.example.taek.blescanner_bylyt.R;
 import com.example.taek.blescanner_bylyt.Services.BLEScanService;
+import com.example.taek.blescanner_bylyt.Utils.BackPressCloseHandler;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
 import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    // Close the app when back button twice pressed
+    private BackPressCloseHandler backPressCloseHandler;
+
     private Context mainActiviyContext = this;
     private String TAG = "MainActiviy";
     private Messenger incomingMessenger;
@@ -38,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Switch switch_scan;
     private TextView editView_saveData;
     private CheckBox checkbox_dataName;
+
+    // Navigation header information
+    public static TextView tvNavHeadId;
+    public static TextView tvNavHeadAddr;
 
     private void connectMessenger() {
         Log.d(TAG, "connectMessenger(): call connectMessenger");
@@ -66,10 +81,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        switch_scan = (Switch) findViewById(R.id.BLEScanSwitch);
-        editView_saveData = (TextView) findViewById(R.id.editView_dataName);
-        checkbox_dataName = (CheckBox) findViewById(R.id.checkBox_saveData);
-        editView_saveData.setEnabled(false);
+        initUIElements();
+
+        // switch_scan = (Switch) findViewById(R.id.BLEScanSwitch);
+        // editView_saveData = (TextView) findViewById(R.id.editView_dataName);
+        // checkbox_dataName = (CheckBox) findViewById(R.id.checkBox_saveData);
+        // editView_saveData.setEnabled(false);
 
         // BLE 관련 Permission 주기
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -92,9 +109,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_ACTIVITY, mainActiviyContext));
 
             connectMessenger();
+
+            backPressCloseHandler = new BackPressCloseHandler(this);
         }
 
-
+/*
         switch_scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -134,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+        */
     }
 
     @Override
@@ -167,20 +187,115 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private MainFragment fragMain;
+    /* DrawerLayout object */
+    private DrawerLayout drawerLayout;
 
+    /* Fragments objects */
+    private MainFragment fragMain;
+    private SetupFragment fragSetup;
+
+    /* Navigation View object */
     private NavigationView navigationView;
 
+    private void initUIElements() {
+        // toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Fragments
+        fragMain = MainFragment.newInstance();
+        fragSetup = SetupFragment.newInstance();
+
+        // DrawerLayout
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Navigation View
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // Set the header of the Navigation View
+        View navHeaderView = navigationView.inflateHeaderView(R.layout.nav_header);
+        tvNavHeadId = (TextView) navHeaderView.findViewById(R.id.nav_head_id);
+        tvNavHeadAddr = (TextView) navHeaderView.findViewById(R.id.nav_head_bluetooth_addr);
+
+        // Set the menu of the Navigation View
+        navigationView.inflateMenu(R.menu.nav_menu);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragMain)
+                .detach(fragMain).attach(fragMain)
+                .commit();
+    }
+
+    /* Essential overriding methods */
+    @Override
+    public void onBackPressed() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            // super.onBackPressed();
+            backPressCloseHandler.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_exit) {
+            moveTaskToBack(true);
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         FragmentManager fragmentManager = getFragmentManager();
         int id = item.getItemId();
 
         switch (id) {
-            case 1:
+            case R.id.nav_main:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragMain)
+                        .detach(fragMain).attach(fragMain)
+                        .commit();
+                break;
+            case R.id.nav_setup:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragSetup)
+                        .detach(fragSetup).attach(fragSetup)
+                        .commit();
+                break;
+            default:
                 break;
         }
 
+        // Change title on appbar
+        if (id == R.id.nav_main)
+            setTitle(R.string.app_name);
+        else
+            setTitle(item.getTitle());
+
+        drawerLayout.closeDrawers();
         return true;
     }
 

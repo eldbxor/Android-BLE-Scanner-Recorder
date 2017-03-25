@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/BLEScanSwitch">
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="If you want to save BLE_data, check this"/>
+        </TableRow>
+
+        <TableRow>
+            <CheckBox
+                android:id="@+id/checkBox_saveData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="save Data"/>
+        </TableRow>
+        <TableRow>
+            <EditText
+                android:id="@+id/editView_dataName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="export.elxs" />
+        </TableRow>
+    </TableLayout>
+</FrameLayout>
