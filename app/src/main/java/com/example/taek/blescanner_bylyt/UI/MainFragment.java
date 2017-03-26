@@ -3,15 +3,22 @@ package com.example.taek.blescanner_bylyt.UI;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Message;
+import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.taek.blescanner_bylyt.R;
+import com.example.taek.blescanner_bylyt.Utils.Constants;
+import com.example.taek.blescanner_bylyt.Utils.ViewInfo;
+import com.example.taek.blescanner_bylyt.Utils.ViewUtils;
 
 /**
  * Created by eldbx on 2017-03-22.
@@ -19,13 +26,26 @@ import com.example.taek.blescanner_bylyt.R;
 
 public class MainFragment extends Fragment {
     private View rootView;
+    private ViewUtils viewUtils;
+    private Switch bLEScanSwitch;
+    public Context context_mainActivity;
+    private boolean isConnectedMessenger;
 
-    public static MainFragment newInstance() {
+/*
+    public static MainFragment newInstance(Context context) {
         MainFragment fragment = new MainFragment();
+        context_mainActivity = context;
+
         return fragment;
     }
+*/
+    public MainFragment() {
+        isConnectedMessenger = false;
+    }
 
-    public MainFragment() {}
+    public void sendContext(Context context) {
+        context_mainActivity = context;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,35 +55,46 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
-/*
-        LinearLayout inflatedLayout = (LinearLayout) rootView.findViewById(R.id.inflatedLayout);
-        LayoutInflater layoutInflater = (LayoutInflater) rootView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layoutInflater.inflate(R.layout.dynamic_beacon_data, inflatedLayout);
-*/
-        addDynamicView(container);
+        viewUtils = new ViewUtils(rootView);
+        bLEScanSwitch = (Switch) rootView.findViewById(R.id.BLEScanSwitch);
+
+        // register onclick listener on the switch
+        bLEScanSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // switch on
+                if (isChecked) {
+                    // first scanning
+                    if (!isConnectedMessenger) {
+                        ((MainActivity) context_mainActivity).connectMessenger();
+                        isConnectedMessenger = true;
+                    }
+                    // not first scanning
+                    else {
+                        try {
+                            ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN));
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                // switch off
+                else {
+                    try {
+                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_STOP_SCAN));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        // 테스트
+        viewUtils.inflateLayout(inflater, R.layout.dynamic_beacon_data, R.id.inflatedLayout);
+
+        viewUtils.removeAllViewsInLayout();
 
         return rootView;
-    }
-
-    public void addDynamicView(ViewGroup container) {
-        TableLayout tableLayout = new TableLayout(rootView.getContext());
-        TableRow tableRow = new TableRow(rootView.getContext());
-        TextView textView1 = new TextView(rootView.getContext());
-        TextView textView2 = new TextView(rootView.getContext());
-
-        // textview setting
-        textView1.setText("Device Name");
-        textView2.setText("taek");
-
-        // tablerow setting
-
-        // tableLayout setting
-
-        tableRow.addView(textView1);
-        tableRow.addView(textView2);
-        tableLayout.addView(tableRow);
-
-        container.addView(tableLayout);
     }
 
     @Override

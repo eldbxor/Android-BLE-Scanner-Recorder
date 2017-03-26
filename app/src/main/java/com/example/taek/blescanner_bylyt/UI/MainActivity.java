@@ -25,9 +25,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.taek.blescanner_bylyt.R;
@@ -41,22 +38,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Close the app when back button twice pressed
     private BackPressCloseHandler backPressCloseHandler;
 
-    private Context mainActiviyContext = this;
+    private Context context_mainActivity = this;
     private String TAG = "MainActiviy";
     private Messenger incomingMessenger;
     private ServiceConnection mServiceConnection;
-    private Messenger mMessenger;
-    private Switch switch_scan;
-    private TextView editView_saveData;
-    private CheckBox checkbox_dataName;
+    public Messenger mMessenger;
 
     // Navigation header information
     public static TextView tvNavHeadId;
     public static TextView tvNavHeadAddr;
 
-    private void connectMessenger() {
+    public void connectMessenger() {
         Log.d(TAG, "connectMessenger(): call connectMessenger");
-        ComponentName cn = new ComponentName(mainActiviyContext, BLEScanService.class);
+        ComponentName cn = new ComponentName(context_mainActivity, BLEScanService.class);
         Intent intent = new Intent();
         intent.setComponent(cn);
 
@@ -65,6 +59,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.d(TAG, "connectMessenger(): connected to service");
                 mMessenger = new Messenger(service);
+
+                // start BLE scanning
+                try {
+                    Message msg = Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN);
+                    msg.replyTo = incomingMessenger;
+                    mMessenger.send(msg);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        mainActiviyContext.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        context_mainActivity.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -106,9 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 builder.show();
             }
 
-            incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_ACTIVITY, mainActiviyContext));
-
-            connectMessenger();
+            incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_ACTIVITY, context_mainActivity));
 
             backPressCloseHandler = new BackPressCloseHandler(this);
         }
@@ -203,8 +204,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         // Fragments
-        fragMain = MainFragment.newInstance();
-        fragSetup = SetupFragment.newInstance();
+        fragMain = new MainFragment();
+        fragMain.sendContext(context_mainActivity);
+        // fragMain = MainFragment.newInstance(context_mainActivity);
+        fragSetup = new SetupFragment();
+        fragSetup.sendContext(context_mainActivity);
+        //fragSetup = SetupFragment.newInstance();
 
         // DrawerLayout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -302,6 +307,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mainActiviyContext.unbindService(mServiceConnection);
+        context_mainActivity.unbindService(mServiceConnection);
     }
 }
