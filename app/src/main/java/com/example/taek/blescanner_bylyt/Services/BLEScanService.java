@@ -30,6 +30,8 @@ public class BLEScanService extends Service {
     private String TAG = "BLEScanService";
     private BLEServiceUtils mBLEServiceUtils;
     private Context serviceContext;
+    public Messenger replyToActivityMessenger; // Activity에 응답하기 위한 Messenger
+    public boolean isConnectedMessenger; // Activity와 Service가 연결되었는지 확인
 
     // Target we publish for clients to send messages to IncomingHandler.
     private Messenger incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_SERVICE, BLEScanService.this));
@@ -43,6 +45,7 @@ public class BLEScanService extends Service {
         serviceContext = this;
         mBLEServiceUtils = new BLEServiceUtils(serviceContext);
         mScanFilter = new ArrayList<>();
+        isConnectedMessenger = false;
 
         mBLEServiceUtils.createBluetoothAdapter(getSystemService(this.BLUETOOTH_SERVICE)); // Bluetooth Adapter 생성
         mBLEServiceUtils.enableBluetooth(); // Bluetooth 사용
@@ -118,12 +121,17 @@ public class BLEScanService extends Service {
             List<String> separatedData = mBLEServiceUtils.separate(result.getScanRecord().getBytes());
 
             // public DeviceInfo(BluetoothDevice device, String address, String scanRecord, String uuid, String major, String minor, int rssi)
+            // separatedData's index 0: scanRecord, 1: uuid, 2: major, 3: minor
             /*
             mBLEServiceUtils.addDeviceInfo(Constants.CALLBACK_TYPE_BLE_SCAN_SERVICE, new DeviceInfo(result.getDevice(), result.getDevice().getAddress(), separatedData.get(0),
                     separatedData.get(1), separatedData.get(2), separatedData.get(3), result.getRssi()));
 
             mBLEServiceUtils.setCurrentBeacons(result.getDevice().getAddress(), result.getRssi());
         */
+
+            // send activity beacon's data from service
+            mBLEServiceUtils.sendActivityBeaconData(result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
+                    separatedData.get(2), separatedData.get(3), separatedData.get(0), result.getRssi());
         }
 
         @Override
@@ -172,6 +180,11 @@ public class BLEScanService extends Service {
 
             mBLEServiceUtils.setCurrentBeacons(device.getAddress(), rssi);
 */
+
+            // send activity beacon's data from service
+            mBLEServiceUtils.sendActivityBeaconData(device.getName(), device.getAddress(), uuid,
+                    String.valueOf(major_int), String.valueOf(minor_int), all, rssi);
+
         }
     };
 

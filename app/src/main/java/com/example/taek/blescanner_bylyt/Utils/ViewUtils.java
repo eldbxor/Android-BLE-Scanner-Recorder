@@ -17,16 +17,16 @@ import java.util.ArrayList;
  */
 
 public class ViewUtils {
-    private ArrayList<ViewInfo> viewInfos;
+    public ArrayList<ViewInfo> viewInfos;
     private View rootView;
-    private LinearLayout inflatedLocation;
+    public LinearLayout inflatedLocation;
 
     public ViewUtils(View rootView) {
         viewInfos = new ArrayList<>();
         this.rootView = rootView;
     }
 
-    // add a dynamic layout
+    // inflate the dynamic views at inflated location
     public void inflateLayout(LayoutInflater inflater, int inflatedLayout, int inflatedLocation) {
         ViewInfo viewInfo = new ViewInfo();
         this.inflatedLocation = (LinearLayout) rootView.findViewById(inflatedLocation);
@@ -37,6 +37,14 @@ public class ViewUtils {
     // remove all views in the layout
     public void removeAllViewsInLayout() {
         inflatedLocation.removeAllViewsInLayout();
+    }
+
+    public void removeViewAt(int index) {
+        inflatedLocation.removeViewAt(index);
+    }
+
+    public void removeView(View view) {
+        inflatedLocation.removeView(view);
     }
 
     public int size() {

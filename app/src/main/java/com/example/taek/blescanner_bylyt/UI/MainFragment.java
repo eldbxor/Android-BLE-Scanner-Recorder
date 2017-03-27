@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,9 +91,25 @@ public class MainFragment extends Fragment {
         });
 
         // 테스트
-        viewUtils.inflateLayout(inflater, R.layout.dynamic_beacon_data, R.id.inflatedLayout);
+        //viewUtils.inflateLayout(inflater, R.layout.dynamic_beacon_data, R.id.inflatedLayout);
+        //viewUtils.inflateLayout(inflater, R.layout.dynamic_beacon_data, R.id.inflatedLayout);
 
-        viewUtils.removeAllViewsInLayout();
+        TextView textView = new TextView(rootView.getContext());
+        LinearLayout linearLayout = new LinearLayout(rootView.getContext());
+        linearLayout.addView(textView);
+
+        container.addView(linearLayout);
+        textView.setText("테스트");
+
+        Log.d("viewInfos's size", String.valueOf(viewUtils.size()));
+        // ViewInfo viewInfo = viewUtils.viewInfos.get(0);
+        // ViewInfo viewInfo2 = viewUtils.viewInfos.get(1);
+
+        // viewInfo.tvDeviceName.setText("첫번째 뷰");
+        // viewInfo2.tvDeviceName.setText("두번째 뷰");
+
+        // viewUtils.removeViewAt(0);
+        // viewUtils.removeAllViewsInLayout();
 
         return rootView;
     }

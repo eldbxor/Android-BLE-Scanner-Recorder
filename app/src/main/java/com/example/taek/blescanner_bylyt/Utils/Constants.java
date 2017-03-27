@@ -13,7 +13,7 @@ public class Constants {
     public static final int HANDLER_TYPE_SERVICE = 2;
 
     // 액티비티에서 받는 message
-
+    public static final int HANDLE_MESSAGE_TYPE_SEND_ACTIVITY_BLE_DATA = 1;
 
     // 서비스에서 받는 message
     public static final int HANDLE_MESSAGE_TYPE_BLE_SCAN = 1;

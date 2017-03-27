@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ServiceConnection mServiceConnection;
     public Messenger mMessenger;
 
+    private boolean isConnectedService;
+
     // Navigation header information
     public static TextView tvNavHeadId;
     public static TextView tvNavHeadAddr;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.d(TAG, "connectMessenger(): connected to service");
+                isConnectedService = true;
                 mMessenger = new Messenger(service);
 
                 // start BLE scanning
@@ -83,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        isConnectedService = false;
 
         initUIElements();
 
@@ -307,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onDestroy() {
         super.onDestroy();
-        context_mainActivity.unbindService(mServiceConnection);
+        if (isConnectedService)
+            context_mainActivity.unbindService(mServiceConnection);
     }
 }

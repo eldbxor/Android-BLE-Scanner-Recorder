@@ -21,7 +21,7 @@ public class ViewInfo {
     public ViewInfo() {}
 
     public void inflateLayout(LayoutInflater inflater, int inflatedLayout, ViewGroup inflatedLocation) {
-        childLayout = (LinearLayout) inflater.inflate(inflatedLayout, inflatedLocation);
+        childLayout = (LinearLayout) inflater.inflate(inflatedLayout, inflatedLocation, true);
 
         tvDeviceName = (TextView) childLayout.findViewById(R.id.tvDeviceName);
         tvDeviceAddress = (TextView) childLayout.findViewById(R.id.tvDeviceAddress);
@@ -30,5 +30,7 @@ public class ViewInfo {
         tvMinor = (TextView) childLayout.findViewById(R.id.tvMinor);
         tvAll = (TextView) childLayout.findViewById(R.id.tvAllData);
         tvRssi = (TextView) childLayout.findViewById(R.id.tvRssi);
+
+        tvDeviceName.setText("테스트");
     }
 }

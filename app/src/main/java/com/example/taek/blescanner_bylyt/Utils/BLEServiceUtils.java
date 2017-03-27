@@ -6,7 +6,12 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.os.Build;
+import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
+
+import com.example.taek.blescanner_bylyt.Services.BLEScanService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +22,12 @@ public class BLEServiceUtils {
     public BluetoothManager mBluetoothManager;
     public BluetoothAdapter mBluetoothAdapter;
     public BluetoothLeScanner mBLEScanner; // BLE 스캐너(api 21 이상)
-    private Context mContext;
+    private Context context_BLEScanService;
     private String TAG = "BLEServiceUtils";
 
     // 생성자
     public BLEServiceUtils(Context context) {
-        mContext = context;
+        context_BLEScanService = context;
         Log.d(TAG, "BLEServiceUtils(): 생성자");
     }
 
@@ -38,134 +43,26 @@ public class BLEServiceUtils {
             Log.d(TAG, "enableBluetooth():  BluetoothAdapter 실행");
         }
     }
-/*
-    public void addDeviceInfo(int callbackType, DeviceInfo deviceInfo) {
-        boolean isExisted = false;
-        int index = 0;
 
-        switch (callbackType) {
-            case Constants.CALLBACK_TYPE_BLE_SCAN_SERVICE:
-                for(DeviceInfo mInfo : ((BLEScanService) mContext).mBLEDevices){
-                    if(mInfo.Address.equals(deviceInfo.Address)){
-                        isExisted = true;
-                        index = ((BLEScanService) mContext).mBLEDevices.indexOf(mInfo);
-                        break;
-                    }
-                }
+    public void sendActivityBeaconData(String deviceName, String deviceAddress, String uuid, String major, String minor, String all, int rssi) {
+        ArrayList arr = new ArrayList();
+        arr.add(deviceName);
+        arr.add(deviceAddress);
+        arr.add(uuid);
+        arr.add(major);
+        arr.add(minor);
+        arr.add(all);
+        arr.add(rssi);
 
-                if(isExisted == true){
-                    ((BLEScanService) mContext).mBLEDevices.add(index, deviceInfo);
-                    ((BLEScanService) mContext).mBLEDevices.remove(index + 1);
-                }else{
-                    ((BLEScanService) mContext).mBLEDevices.add(deviceInfo);
-                }
-                break;
-
-            case Constants.CALLBACK_TYPE_CALIBRATION_SERVICE:
-                for(DeviceInfo mInfo : ((CalibrationService) mContext).mBLEDevices){
-                    if(mInfo.Address.equals(deviceInfo.Address)){
-                        isExisted = true;
-                        index = ((CalibrationService) mContext).mBLEDevices.indexOf(mInfo);
-                        break;
-                    }
-                }
-
-                if(isExisted == true){
-                    ((CalibrationService) mContext).mBLEDevices.add(index, deviceInfo);
-                    ((CalibrationService) mContext).mBLEDevices.remove(index + 1);
-                }else{
-                    ((CalibrationService) mContext).mBLEDevices.add(deviceInfo);
-                }
-                break;
+        // send Activity Beacon data from service
+        try {
+            ((BLEScanService) context_BLEScanService).replyToActivityMessenger.send(
+                    Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_SEND_ACTIVITY_BLE_DATA, arr));
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
-    public void addEssentialData(int callbackType, Map<String, String> essentialData) {
-        boolean isExisted = false;
-        int index = 0;
-
-        switch (callbackType) {
-            case Constants.CALLBACK_TYPE_BLE_SCAN_SERVICE:
-                for (Map<String, String> map : ((BLEScanService) mContext).EssentialDataArray) {
-                    if (essentialData.get("id_workplace").equals(map.get("id_workplace"))) {
-                        isExisted = true;
-                        index = ((BLEScanService) mContext).EssentialDataArray.indexOf(map);
-                        break;
-                    }
-                }
-
-                if (isExisted == true) {
-                    ((BLEScanService) mContext).EssentialDataArray.add(index, essentialData);
-                    ((BLEScanService) mContext).EssentialDataArray.remove(index + 1);
-                } else {
-                    ((BLEScanService) mContext).EssentialDataArray.add(essentialData);
-                }
-                break;
-
-            case Constants.CALLBACK_TYPE_CALIBRATION_SERVICE:
-                for (Map<String, String> map : ((CalibrationService) mContext).EssentialDataArray) {
-                    if (essentialData.get("id_workplace").equals(map.get("id_workplace"))) {
-                        isExisted = true;
-                        index = ((CalibrationService) mContext).EssentialDataArray.indexOf(map);
-                        break;
-                    }
-                }
-
-                if (isExisted == true) {
-                    ((CalibrationService) mContext).EssentialDataArray.add(index, essentialData);
-                    ((CalibrationService) mContext).EssentialDataArray.remove(index + 1);
-                } else {
-                    ((CalibrationService) mContext).EssentialDataArray.add(essentialData);
-                }
-                break;
-        }
-    }
-
-    public void addFilterList(int callbackType, String beaconAddress){
-        boolean isExisted = false;
-        int index = 0;
-
-        if(beaconAddress.equals(""))
-            return;
-
-        switch (callbackType) {
-            case Constants.CALLBACK_TYPE_BLE_SCAN_SERVICE:
-                for(String mac : ((BLEScanService) mContext).filterlist){
-                    if(mac.equals(beaconAddress)){
-                        isExisted = true;
-                        index = ((BLEScanService) mContext).filterlist.indexOf(mac);
-                        break;
-                    }
-                }
-
-                if(isExisted == true){
-                    ((BLEScanService) mContext).filterlist.add(index, beaconAddress);
-                    ((BLEScanService) mContext).filterlist.remove(index + 1);
-                }else{
-                    ((BLEScanService) mContext).filterlist.add(beaconAddress);
-                }
-                break;
-
-            case Constants.CALLBACK_TYPE_CALIBRATION_SERVICE:
-                for(String mac : ((CalibrationService) mContext).filterlist){
-                    if(mac.equals(beaconAddress)){
-                        isExisted = true;
-                        index = ((CalibrationService) mContext).filterlist.indexOf(mac);
-                        break;
-                    }
-                }
-
-                if(isExisted == true){
-                    ((CalibrationService) mContext).filterlist.add(index, beaconAddress);
-                    ((CalibrationService) mContext).filterlist.remove(index + 1);
-                }else{
-                    ((CalibrationService) mContext).filterlist.add(beaconAddress);
-                }
-                break;
-        }
-
-    }
-*/
     // uuid, major, minor 나누는 메서드
     public List<String> separate(byte[] scanRecord) {
         List<String> result = new ArrayList<String>();

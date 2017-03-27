@@ -14,7 +14,7 @@
         android:paddingBottom="15dp"
         android:text="BLE scan" />
 
-    <!-- Inflation할 레이아웃 영역 -->
+    <!-- Inflate 할 레이아웃 영역 -->
     <LinearLayout
         android:id="@+id/inflatedLayout"
         android:orientation="vertical"
