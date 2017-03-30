@@ -14,6 +14,11 @@
         android:paddingBottom="15dp"
         android:text="BLE scan" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
+
     <!-- Inflate 할 레이아웃 영역 -->
     <LinearLayout
         android:id="@+id/inflatedLayout"

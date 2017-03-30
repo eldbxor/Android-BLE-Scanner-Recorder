@@ -118,48 +118,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             backPressCloseHandler = new BackPressCloseHandler(this);
         }
-
-/*
-        switch_scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Switch on
-                if (isChecked) {
-                    try { // BLE Scan
-                        Message msg = Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN);
-                        msg.replyTo = incomingMessenger;
-                        mMessenger.send(msg);
-                        Log.d(TAG, "MessengerCommunication: Activity send HANDLE_MESSAGE_TYPE_BLE_SCAN");
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Switch off
-                else {
-                    try { // stop scan
-                        mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_STOP_SCAN));
-                        Log.d(TAG, "MessengerCommunication: Activity send HANDLE_MESSAGE_TYPE_STOP_SCAN");
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        checkbox_dataName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // checkBox is checked
-                if (isChecked) {
-                    editView_saveData.setEnabled(true);
-                }
-                // checkBox isn't checked
-                else {
-                    editView_saveData.setEnabled(false);
-                }
-            }
-        });
-        */
     }
 
     @Override
@@ -197,8 +155,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
 
     /* Fragments objects */
-    private MainFragment fragMain;
-    private SetupFragment fragSetup;
+    public MainFragment fragMain;
+    public SetupFragment fragSetup;
 
     /* Navigation View object */
     private NavigationView navigationView;
@@ -314,5 +272,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         if (isConnectedService)
             context_mainActivity.unbindService(mServiceConnection);
+        try {
+            fragMain.timerStop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

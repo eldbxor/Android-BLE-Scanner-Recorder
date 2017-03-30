@@ -3,6 +3,7 @@ package com.example.taek.blescanner_bylyt.UI;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
@@ -21,16 +22,21 @@ import com.example.taek.blescanner_bylyt.Utils.Constants;
 import com.example.taek.blescanner_bylyt.Utils.ViewInfo;
 import com.example.taek.blescanner_bylyt.Utils.ViewUtils;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by eldbx on 2017-03-22.
  */
 
 public class MainFragment extends Fragment {
     private View rootView;
-    private ViewUtils viewUtils;
+    public ViewUtils viewUtils;
     private Switch bLEScanSwitch;
     public Context context_mainActivity;
     private boolean isConnectedMessenger;
+    public Timer timer;
+    public TimerTask timerTask;
 
 /*
     public static MainFragment newInstance(Context context) {
@@ -56,8 +62,10 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        viewUtils = new ViewUtils(rootView);
+        viewUtils = new ViewUtils(rootView, R.id.inflatedLayout);
         bLEScanSwitch = (Switch) rootView.findViewById(R.id.BLEScanSwitch);
+        timer = new Timer();
+
 
         // register onclick listener on the switch
         bLEScanSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -90,28 +98,33 @@ public class MainFragment extends Fragment {
             }
         });
 
-        // 테스트
-        //viewUtils.inflateLayout(inflater, R.layout.dynamic_beacon_data, R.id.inflatedLayout);
-        //viewUtils.inflateLayout(inflater, R.layout.dynamic_beacon_data, R.id.inflatedLayout);
 
-        TextView textView = new TextView(rootView.getContext());
-        LinearLayout linearLayout = new LinearLayout(rootView.getContext());
-        linearLayout.addView(textView);
-
-        container.addView(linearLayout);
-        textView.setText("테스트");
-
-        Log.d("viewInfos's size", String.valueOf(viewUtils.size()));
-        // ViewInfo viewInfo = viewUtils.viewInfos.get(0);
-        // ViewInfo viewInfo2 = viewUtils.viewInfos.get(1);
-
-        // viewInfo.tvDeviceName.setText("첫번째 뷰");
-        // viewInfo2.tvDeviceName.setText("두번째 뷰");
-
-        // viewUtils.removeViewAt(0);
-        // viewUtils.removeAllViewsInLayout();
 
         return rootView;
+    }
+
+    public void timerStart() {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                ((MainActivity) context_mainActivity).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        timerTextUpdate();
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask, 1000);
+    }
+
+    public void timerStop() {
+        timer.cancel();
+        timer.purge();
+    }
+
+    public void timerTextUpdate() {
+        viewUtils.inflateLayout();
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.example.taek.blescanner_bylyt.Services.BLEScanService;
+import com.example.taek.blescanner_bylyt.UI.MainActivity;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,8 @@ public class IncomingHandler extends android.os.Handler {
                             arr.add(all);
                             arr.add(rssi);
                          */
-                        ArrayList arr = (ArrayList) msg.obj;
+                        // ArrayList arr = (ArrayList) msg.obj;
+                        ((MainActivity) mContext).fragMain.viewUtils.updateViewInfo((ArrayList) msg.obj);
 
                         break;
                 }
