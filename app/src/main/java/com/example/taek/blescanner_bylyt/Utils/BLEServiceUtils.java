@@ -44,22 +44,21 @@ public class BLEServiceUtils {
         }
     }
 
-    public void sendActivityBeaconData(String deviceName, String deviceAddress, String uuid, String major, String minor, String all, int rssi) {
-        ArrayList arr = new ArrayList();
-        arr.add(deviceName);
-        arr.add(deviceAddress);
-        arr.add(uuid);
-        arr.add(major);
-        arr.add(minor);
-        arr.add(all);
-        arr.add(rssi);
+    // send Activity Beacon data from service
+    public void sendBeaconDataToActivity(ArrayList<String[]> arr_BeaconData) {
+        Log.d(TAG, "sendBeaconDataToActivity: send arr_BeaconData to activity, arr_BeaconData's size = " + String.valueOf(arr_BeaconData.size()));
+        if (arr_BeaconData.size() != 0) {
+            for (String[] beaconData : arr_BeaconData) {
+                try {
+                    ((BLEScanService) context_BLEScanService).replyToActivityMessenger.send(
+                            Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_SEND_ACTIVITY_BLE_DATA, beaconData));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        // send Activity Beacon data from service
-        try {
-            ((BLEScanService) context_BLEScanService).replyToActivityMessenger.send(
-                    Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_SEND_ACTIVITY_BLE_DATA, arr));
-        } catch (RemoteException e) {
-            e.printStackTrace();
+            // clear beaconData's arrayList
+            ((BLEScanService) context_BLEScanService).arr_beaconData.clear();
         }
     }
 

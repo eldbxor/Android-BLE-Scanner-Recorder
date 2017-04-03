@@ -11,7 +11,6 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Messenger;
 import android.util.Log;
@@ -23,6 +22,8 @@ import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BLEScanService extends Service {
     private ScanSettings mScanSetting;
@@ -32,6 +33,9 @@ public class BLEScanService extends Service {
     private Context serviceContext;
     public Messenger replyToActivityMessenger; // Activity에 응답하기 위한 Messenger
     public boolean isConnectedMessenger; // Activity와 Service가 연결되었는지 확인
+    public ArrayList<String[]> arr_beaconData;
+    private Timer timer;
+    private TimerTask timerTask;
 
     // Target we publish for clients to send messages to IncomingHandler.
     private Messenger incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_SERVICE, BLEScanService.this));
@@ -45,6 +49,7 @@ public class BLEScanService extends Service {
         serviceContext = this;
         mBLEServiceUtils = new BLEServiceUtils(serviceContext);
         mScanFilter = new ArrayList<>();
+        arr_beaconData = new ArrayList<>();
         isConnectedMessenger = false;
 
         mBLEServiceUtils.createBluetoothAdapter(getSystemService(this.BLUETOOTH_SERVICE)); // Bluetooth Adapter 생성
@@ -60,8 +65,8 @@ public class BLEScanService extends Service {
             e.printStackTrace();
         }
 
-        if(mBLEServiceUtils.mBluetoothAdapter != null){ // && mBluetoothAdapter.isEnabled()){
-            if(Build.VERSION.SDK_INT >= 21){
+        if (mBLEServiceUtils.mBluetoothAdapter != null) { // && mBluetoothAdapter.isEnabled()){
+            if (Build.VERSION.SDK_INT >= 21) {
                 Log.d(TAG, "onCreate(): BLEScanner setting");
                 mBLEServiceUtils.mBLEScanner = mBLEServiceUtils.mBluetoothAdapter.getBluetoothLeScanner();
                 mScanSetting = mBLEServiceUtils.setPeriod(ScanSettings.SCAN_MODE_LOW_LATENCY);
@@ -69,7 +74,7 @@ public class BLEScanService extends Service {
             }
 
             // BLEScanner 객체 확인
-            if(mBLEServiceUtils.mBLEScanner == null && Build.VERSION.SDK_INT >= 21) {
+            if (mBLEServiceUtils.mBLEScanner == null && Build.VERSION.SDK_INT >= 21) {
                 Log.d(TAG, "onCreate(): mBLEScanner is null");
                 Toast.makeText(serviceContext, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
                 return;
@@ -78,27 +83,31 @@ public class BLEScanService extends Service {
 
     }
 
-    public void scanBLEDevice(final boolean enable){
-        if(enable){
-            if(Build.VERSION.SDK_INT < 21){
+    public void scanBLEDevice(final boolean enable) {
+        if (enable){
+            if (Build.VERSION.SDK_INT < 21) {
                 // 롤리팝 이전버전
                 mBLEServiceUtils.mBluetoothAdapter.startLeScan(mLeScanCallback);
-            }else{
+            } else{
                 mBLEServiceUtils.mBLEScanner.startScan(null, mScanSetting, mScanCallback);
             }
+
+            timerStart();
         }else{
-            if(Build.VERSION.SDK_INT < 21){
+            if (Build.VERSION.SDK_INT < 21) {
                 // 롤리팝 이전버전
                 mBLEServiceUtils.mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            }else{
+            } else{
                 mBLEServiceUtils.mBLEScanner.stopScan(mScanCallback);
                 mScanFilter.clear();
             }
+
+            timerStop();
         }
     }
 
     public void restartScan(int scanMode) {
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             if (mScanSetting.getScanMode() == scanMode) {
                 return;
             } else {
@@ -109,6 +118,40 @@ public class BLEScanService extends Service {
                 scanBLEDevice(true);
             }
         }
+    }
+
+    // arr_beaconData에 스캔된 비콘 데이터가 있는지 검사
+    public boolean isContainsBeaconData(String deviceAddress, String uuid) {
+        boolean contains = false;
+        for (String[] beaconData : arr_beaconData) {
+            if (beaconData[1].equals(deviceAddress) || beaconData[2].equals(uuid)) {
+                contains = true;
+            }
+        }
+
+        return contains;
+    }
+
+    public void timerStart() {
+        timer = new Timer();
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timerArrUpdate();
+            }
+        };
+        timer.schedule(timerTask, 1000, 1000);
+    }
+
+    public void timerStop() {
+        timer.cancel();
+        timer.purge();
+    }
+
+    public void timerArrUpdate() {
+        Log.d(TAG, "timerTextUpdate(): send activity beacons's data and clear arr_BeaconData");
+        mBLEServiceUtils.sendBeaconDataToActivity(arr_beaconData);
     }
 
     // api 21 이상
@@ -129,9 +172,16 @@ public class BLEScanService extends Service {
             mBLEServiceUtils.setCurrentBeacons(result.getDevice().getAddress(), result.getRssi());
         */
 
+            if (!isContainsBeaconData(result.getDevice().getAddress(), separatedData.get(1))) {
+                Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + result.getDevice().getName() + ", device's address = " + result.getDevice().getAddress() +
+                        separatedData.get(1));
+                arr_beaconData.add(new String[]{ result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
+                        separatedData.get(2), separatedData.get(3), separatedData.get(0), String.valueOf(result.getRssi()) });
+            }
+            /*
             // send activity beacon's data from service
-            mBLEServiceUtils.sendActivityBeaconData(result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
-                    separatedData.get(2), separatedData.get(3), separatedData.get(0), result.getRssi());
+            mBLEServiceUtils.sendBeaconDataToActivity(result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
+                    separatedData.get(2), separatedData.get(3), separatedData.get(0), result.getRssi()); */
         }
 
         @Override
@@ -181,9 +231,15 @@ public class BLEScanService extends Service {
             mBLEServiceUtils.setCurrentBeacons(device.getAddress(), rssi);
 */
 
+            if (!isContainsBeaconData(device.getAddress(), uuid)) {
+                Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + device.getName() + ", device's address = " + device.getAddress());
+                arr_beaconData.add(new String[]{ device.getName(), device.getAddress(), uuid,
+                        String.valueOf(major_int), String.valueOf(minor_int), all, String.valueOf(rssi) });
+            }
+            /*
             // send activity beacon's data from service
-            mBLEServiceUtils.sendActivityBeaconData(device.getName(), device.getAddress(), uuid,
-                    String.valueOf(major_int), String.valueOf(minor_int), all, rssi);
+            mBLEServiceUtils.sendBeaconDataToActivity(device.getName(), device.getAddress(), uuid,
+                    String.valueOf(major_int), String.valueOf(minor_int), all, rssi); */
 
         }
     };
@@ -197,6 +253,10 @@ public class BLEScanService extends Service {
     @Override
     public void onDestroy(){
         Log.i(TAG, "Service onDestroy");
-
+        try {
+            timerStop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

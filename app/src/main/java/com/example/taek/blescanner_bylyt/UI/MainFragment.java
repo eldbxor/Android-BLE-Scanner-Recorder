@@ -38,6 +38,8 @@ public class MainFragment extends Fragment {
     public Timer timer;
     public TimerTask timerTask;
 
+    private String TAG = "MainFragment";
+
 /*
     public static MainFragment newInstance(Context context) {
         MainFragment fragment = new MainFragment();
@@ -64,7 +66,6 @@ public class MainFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         viewUtils = new ViewUtils(rootView, R.id.inflatedLayout);
         bLEScanSwitch = (Switch) rootView.findViewById(R.id.BLEScanSwitch);
-        timer = new Timer();
 
 
         // register onclick listener on the switch
@@ -86,6 +87,8 @@ public class MainFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
+
+                    timerStart();
                 }
                 // switch off
                 else {
@@ -94,6 +97,8 @@ public class MainFragment extends Fragment {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+
+                    timerStop();
                 }
             }
         });
@@ -104,10 +109,12 @@ public class MainFragment extends Fragment {
     }
 
     public void timerStart() {
+        timer = new Timer();
+
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                ((MainActivity) context_mainActivity).runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         timerTextUpdate();
@@ -115,7 +122,7 @@ public class MainFragment extends Fragment {
                 });
             }
         };
-        timer.schedule(timerTask, 1000);
+        timer.schedule(timerTask, 1000, 1000);
     }
 
     public void timerStop() {
@@ -124,6 +131,9 @@ public class MainFragment extends Fragment {
     }
 
     public void timerTextUpdate() {
+        Log.d(TAG, "timerTextUpdate(): inflate beacons's data on MainFragment");
+        Log.d(TAG, "timerTextUpdate(): viewInfos's size = " + String.valueOf(viewUtils.size()) + ", inflatedLayout's children count = " +
+        String.valueOf(viewUtils.inflatedLocation.getChildCount()));
         viewUtils.inflateLayout();
     }
 

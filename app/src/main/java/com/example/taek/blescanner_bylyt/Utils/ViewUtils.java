@@ -66,31 +66,48 @@ public class ViewUtils {
         } */
     }
 
-    public void updateViewInfo(ArrayList beaconData) {
-        /* BeaconData
-           arr.add(deviceName);
-           arr.add(deviceAddress);
-           arr.add(uuid);
-           arr.add(major);
-           arr.add(minor);
-           arr.add(all);
-           arr.add(rssi);
+    public void updateViewInfo(String[] beaconData) {
+        /* beaconData's structure :
+           new String[]{
+               deviceName,
+               deviceAddress,
+               uuid,
+               major,
+               minor,
+               all,
+               rssi
+           }
            */
-
         // when view's size is 0 or the beaconData didn't exist.
         if (size() == 0 || !contains(beaconData)) {
             ViewInfo viewInfo = new ViewInfo(rootView);
-            viewInfo.updateText(String.valueOf(beaconData.get(0)), String.valueOf(beaconData.get(1)), String.valueOf(beaconData.get(2)),
-                    String.valueOf(beaconData.get(4)), String.valueOf(beaconData.get(5)), String.valueOf(beaconData.get(6)), String.valueOf(beaconData.get(7)));
+            viewInfo.updateText(beaconData[0], beaconData[1], beaconData[2], beaconData[3], beaconData[4], beaconData[5], beaconData[6]);
 
             viewInfos.add(viewInfo);
         }
         // when beaconData already exist.
         else {
-            ViewInfo viewInfo = viewInfos.get(indexOf(String.valueOf(beaconData.get(1))));
-            viewInfo.updateText(String.valueOf(beaconData.get(0)), String.valueOf(beaconData.get(1)), String.valueOf(beaconData.get(2)),
-                    String.valueOf(beaconData.get(4)), String.valueOf(beaconData.get(5)), String.valueOf(beaconData.get(6)), String.valueOf(beaconData.get(7)));
+            ViewInfo viewInfo = viewInfos.get(indexOf(beaconData[2]));
+            viewInfo.updateText(beaconData[0], beaconData[1], beaconData[2], beaconData[3], beaconData[4], beaconData[5], beaconData[6]);
         }
+
+
+/*
+        // when view's size is 0 or the beaconData didn't exist.
+        if (size() == 0 || !contains(arr_BeaconData)) {
+            ViewInfo viewInfo = new ViewInfo(rootView);
+            viewInfo.updateText(String.valueOf(arr_BeaconData.get(0)), String.valueOf(arr_BeaconData.get(1)), String.valueOf(arr_BeaconData.get(2)),
+                    String.valueOf(arr_BeaconData.get(3)), String.valueOf(arr_BeaconData.get(4)), String.valueOf(arr_BeaconData.get(5)), String.valueOf(arr_BeaconData.get(6)));
+
+            viewInfos.add(viewInfo);
+        }
+        // when beaconData already exist.
+        else {
+            ViewInfo viewInfo = viewInfos.get(indexOf(String.valueOf(arr_BeaconData.get(2))));
+            viewInfo.updateText(String.valueOf(arr_BeaconData.get(0)), String.valueOf(arr_BeaconData.get(1)), String.valueOf(arr_BeaconData.get(2)),
+                    String.valueOf(arr_BeaconData.get(3)), String.valueOf(arr_BeaconData.get(4)), String.valueOf(arr_BeaconData.get(5)), String.valueOf(arr_BeaconData.get(6)));
+        }
+        */
     }
 
     // remove all views in the layout
@@ -111,11 +128,11 @@ public class ViewUtils {
     }
 
     // find the index in viewInfos
-    public int indexOf(String deviceAddress) {
+    public int indexOf(String uuid) {
         int index = -1;
 
         for (ViewInfo viewInfo : viewInfos) {
-            if (viewInfo.tvDeviceName.getText().equals(deviceAddress)) {
+            if (viewInfo.strUuid.equals(uuid)) {
                 index = viewInfos.indexOf(viewInfo);
             }
         }
@@ -124,9 +141,9 @@ public class ViewUtils {
         return index;
     }
 
-    public boolean contains(ArrayList beaconData) {
-        String deviceAddress = String.valueOf(beaconData.get(1));
-        int index = indexOf(deviceAddress);
+    public boolean contains(String[] beaconData) {
+        String uuid = beaconData[2];
+        int index = indexOf(uuid);
         if (index == -1)
             return false;
         else

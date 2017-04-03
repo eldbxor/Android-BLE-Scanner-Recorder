@@ -128,10 +128,18 @@ public class ViewInfo {
     public void setText() {
         tvDeviceName.setText(strDeviceName);
         tvDeviceAddress.setText(strDeviceAddress);
-        tvUuid.setText(strUuid);
+        String strDeviceAddress1, strDeviceAddress2;
+        strDeviceAddress1 = strUuid.substring(0, 42);
+        strDeviceAddress2 = strUuid.substring(42, strUuid.length());
+        tvUuid.setText(strDeviceAddress1);
+        tvUuid.append("\n" + strDeviceAddress2);
         tvMajor.setText(strMajor);
         tvMinor.setText(strMinor);
-        tvAll.setText(strAll);
+        String strAll1, strAll2;
+        strAll1 = strAll.substring(0, 42);
+        strAll2 = strAll.substring(42, strAll.length());
+        tvAll.setText(strAll1);
+        tvAll.append("\n" + strAll2);
         tvRssi.setText(strRssi);
     }
 

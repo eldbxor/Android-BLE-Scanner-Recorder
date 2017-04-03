@@ -20,10 +20,14 @@
         android:background="@color/gray"/>
 
     <!-- Inflate 할 레이아웃 영역 -->
-    <LinearLayout
-        android:id="@+id/inflatedLayout"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/inflatedLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
