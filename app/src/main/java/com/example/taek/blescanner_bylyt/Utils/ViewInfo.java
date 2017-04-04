@@ -23,8 +23,12 @@ public class ViewInfo {
     public TextView tvDeviceName, tvDeviceAddress, tvUuid, tvMajor, tvMinor, tvAll, tvRssi;
     public String strDeviceName, strDeviceAddress, strUuid, strMajor, strMinor, strAll, strRssi;
     public View devisionLine;
+    public int removeCount;
 
     public ViewInfo(View rootView) {
+        // count that didn't scan BLE device.
+        removeCount = 0;
+
         // initialize the views
         childLayout = new LinearLayout(rootView.getContext());
 
@@ -144,6 +148,7 @@ public class ViewInfo {
     }
 
     public void updateText(String deviceName, String deviceAddress, String uuid, String major, String minor, String all, String rssi) {
+        removeCount = 0;
         strDeviceName = deviceName;
         strDeviceAddress = deviceAddress;
         strUuid = uuid;

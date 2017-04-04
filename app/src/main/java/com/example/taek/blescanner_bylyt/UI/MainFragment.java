@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -33,8 +34,10 @@ public class MainFragment extends Fragment {
     private View rootView;
     public ViewUtils viewUtils;
     private Switch bLEScanSwitch;
+    private ProgressBar progressBar;
+    private TextView numberOfScannedDevice;
     public Context context_mainActivity;
-    private boolean isConnectedMessenger;
+    public boolean isConnectedMessenger, isScanning, isOnUi;
     public Timer timer;
     public TimerTask timerTask;
 
@@ -50,6 +53,8 @@ public class MainFragment extends Fragment {
 */
     public MainFragment() {
         isConnectedMessenger = false;
+        isScanning = false;
+        isOnUi = false;
     }
 
     public void sendContext(Context context) {
@@ -66,6 +71,12 @@ public class MainFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         viewUtils = new ViewUtils(rootView, R.id.inflatedLayout);
         bLEScanSwitch = (Switch) rootView.findViewById(R.id.BLEScanSwitch);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        numberOfScannedDevice = (TextView) rootView.findViewById(R.id.numberOfScannedDevice);
+        isOnUi = true;
+
+        progressBar.setEnabled(false);
+        progressBar.setVisibility(View.INVISIBLE);
 
 
         // register onclick listener on the switch
@@ -82,16 +93,24 @@ public class MainFragment extends Fragment {
                     // not first scanning
                     else {
                         try {
-                            ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN));
+                            Log.d(TAG, "bLEScanSwitch: send Handle message that type is BLE Scan");
+                            if (!isScanning)
+                                ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN));
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
                     }
 
                     timerStart();
+                    progressBar.setEnabled(true);
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    isScanning = true;
                 }
                 // switch off
                 else {
+                    isScanning = false;
+
                     try {
                         ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_STOP_SCAN));
                     } catch (RemoteException e) {
@@ -99,6 +118,8 @@ public class MainFragment extends Fragment {
                     }
 
                     timerStop();
+                    progressBar.setEnabled(false);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -108,18 +129,39 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        isOnUi = true;
+        if (isScanning) {
+            timerStop();
+            timerStart();
+        }
+        Log.d(TAG, "called onResume()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isOnUi = false;
+        Log.d(TAG, "called onPause");
+        timerStop();
+    }
+
     public void timerStart() {
         timer = new Timer();
 
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        timerTextUpdate();
-                    }
-                });
+                if (isOnUi) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            timerTextUpdate();
+                        }
+                    });
+                }
             }
         };
         timer.schedule(timerTask, 1000, 1000);
@@ -135,6 +177,18 @@ public class MainFragment extends Fragment {
         Log.d(TAG, "timerTextUpdate(): viewInfos's size = " + String.valueOf(viewUtils.size()) + ", inflatedLayout's children count = " +
         String.valueOf(viewUtils.inflatedLocation.getChildCount()));
         viewUtils.inflateLayout();
+
+        // setting a progressBar
+        numberOfScannedDevice.setText(String.valueOf(viewUtils.size()));
+        if (viewUtils.size() > 0) {
+            progressBar.setEnabled(false);
+            progressBar.setVisibility(View.INVISIBLE);
+        } else {
+            if (bLEScanSwitch.isChecked()) {
+                progressBar.setEnabled(true);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override

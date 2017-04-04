@@ -11,8 +11,23 @@
         android:layout_height="wrap_content"
         android:paddingRight="15dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
         android:text="BLE scan" />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of BLE device = "/>
+            <TextView
+                android:id="@+id/numberOfScannedDevice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"/>
+        </TableRow>
+    </TableLayout>
 
     <View
         android:layout_width="match_parent"
@@ -30,4 +45,10 @@
             android:layout_height="wrap_content">
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
