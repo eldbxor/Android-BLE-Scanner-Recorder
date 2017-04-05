@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingRight="15dp"
         android:paddingTop="15dp"
+        android:paddingBottom="5dp"
         android:text="BLE scan" />
 
     <TableLayout
@@ -32,12 +33,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"/>
+        android:background="@color/colorGray"/>
 
     <!-- Inflate 할 레이아웃 영역 -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorScrollView">
         <LinearLayout
             android:id="@+id/inflatedLayout"
             android:orientation="vertical"
@@ -46,9 +48,24 @@
         </LinearLayout>
     </ScrollView>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
+    <RelativeLayout
+        android:id="@+id/relativeLayoutInMainFrag"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvBackgroundTextInMainFrag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorGray"
+            android:text="Scan Result"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
 </LinearLayout>

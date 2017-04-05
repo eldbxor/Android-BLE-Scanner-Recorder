@@ -118,9 +118,9 @@ public class ViewInfo {
 
         // add division line to tableLayout
         if (Build.VERSION.SDK_INT >= 23)
-            devisionLine.setBackgroundColor(rootView.getResources().getColor(R.color.gray, null));
+            devisionLine.setBackgroundColor(rootView.getResources().getColor(R.color.colorGray, null));
         else
-            devisionLine.setBackgroundColor(rootView.getResources().getColor(R.color.gray));
+            devisionLine.setBackgroundColor(rootView.getResources().getColor(R.color.colorGray));
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 3);
         devisionLine.setLayoutParams(layoutParams);
         tableLayout.addView(devisionLine);

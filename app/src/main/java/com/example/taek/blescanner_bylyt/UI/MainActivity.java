@@ -272,10 +272,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         if (isConnectedService)
             context_mainActivity.unbindService(mServiceConnection);
-        try {
-            fragMain.timerStop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

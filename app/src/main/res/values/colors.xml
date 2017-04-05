@@ -3,6 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="black">#000000</color>
-    <color name="gray">#9E9E9E</color>
+    <color name="colorGray">#9E9E9E</color>
+    <color name="colorSetupText">#777777</color>
+    <color name="colorContour">#DDDDDD</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlue">#2196F3</color>
+    <color name="colorRed">#F44336</color>
+    <color name="colorGreen">#4CAF50</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorSetupButton">#303F9F</color>
+    <color name="colorScrollView">#5C6BC0</color>
+    <drawable name="bg_select">#2196F3</drawable>
+    <drawable name="bg">#EEEEEE</drawable>
 </resources>

@@ -12,25 +12,28 @@ import android.widget.TextView;
 import com.example.taek.blescanner_bylyt.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by eldbx on 2017-03-26.
  */
 
 public class ViewUtils {
-    public ArrayList<ViewInfo> viewInfos;
+    public CopyOnWriteArrayList<ViewInfo> viewInfos;
     private View rootView;
     public LinearLayout inflatedLocation;
 
     public ViewUtils(View rootView, int inflatedLocation) {
-        viewInfos = new ArrayList<>();
+        viewInfos = new CopyOnWriteArrayList<>();
         this.rootView = rootView;
         this.inflatedLocation = (LinearLayout) rootView.findViewById(inflatedLocation);
     }
 
     // inflate the dynamic views at inflated location
     public void inflateLayout() {
-        for (ViewInfo viewInfo : viewInfos) {
+        for(Iterator<ViewInfo> iterator = viewInfos.iterator(); iterator.hasNext();) {
+            ViewInfo viewInfo = iterator.next();
             boolean exist = false;
             viewInfo.removeCount++;
 
@@ -61,24 +64,38 @@ public class ViewUtils {
                 viewInfo.setText();
             }
         }
-
         /*
-        // when view's size is 0 or the beaconData didn't exist.
-        if (size() == 0 || !contains(beaconData)) {
-            ViewInfo viewInfo = new ViewInfo(rootView);
-            this.inflatedLocation = (LinearLayout) rootView.findViewById(inflatedLocation);
-            viewInfo.updateText(String.valueOf(beaconData.get(0)), String.valueOf(beaconData.get(1)), String.valueOf(beaconData.get(2)),
-                    String.valueOf(beaconData.get(4)), String.valueOf(beaconData.get(5)), String.valueOf(beaconData.get(6)), String.valueOf(beaconData.get(7)));
+        for (ViewInfo viewInfo : viewInfos) {
+            boolean exist = false;
+            viewInfo.removeCount++;
 
-            this.inflatedLocation.addView(viewInfo.childLayout);
-            viewInfos.add(viewInfo);
-        }
-        // when beaconData already exist.
-        else {
-            ViewInfo viewInfo = viewInfos.get(indexOf(String.valueOf(beaconData.get(1))));
-            viewInfo.updateText(String.valueOf(beaconData.get(0)), String.valueOf(beaconData.get(1)), String.valueOf(beaconData.get(2)),
-                    String.valueOf(beaconData.get(4)), String.valueOf(beaconData.get(5)), String.valueOf(beaconData.get(6)), String.valueOf(beaconData.get(7)));
-        } */
+            if (viewInfo.removeCount > 5) { // 비콘 데이터가 5번 이상 스캔되지 않으면 레이아웃에서 삭제
+                for (int i = 0; i < inflatedLocation.getChildCount(); i++) {
+                    LinearLayout childLayout = (LinearLayout) inflatedLocation.getChildAt(i);
+                    if (viewInfo.childLayout.equals(childLayout)) {
+                        inflatedLocation.removeViewAt(i);
+                        break;
+                    }
+                }
+
+                viewInfos.remove(viewInfo);
+                continue;
+            } else {
+                for (int i = 0; i < inflatedLocation.getChildCount(); i++) {
+                    LinearLayout childLayout = (LinearLayout) inflatedLocation.getChildAt(i);
+                    if (viewInfo.childLayout.equals(childLayout)) {
+                        Log.d("childLayout", "already exist");
+                        exist = true;
+                    }
+                }
+            }
+            if (exist) {
+                viewInfo.setText();
+            } else {
+                inflatedLocation.addView(viewInfo.childLayout);
+                viewInfo.setText();
+            }
+        }*/
     }
 
     public void updateViewInfo(String[] beaconData) {

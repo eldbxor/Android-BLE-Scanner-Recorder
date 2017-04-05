@@ -1,32 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TableLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
+        android:textSize="15dp"
+        android:text="Settings"
+        android:textColor="@color/colorSetupText"/>
+
+    <Button
+        android:id="@+id/button_set_period"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/BLEScanSwitch">
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_selector"
+        android:gravity="center|left"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:textColor="@color/colorSetupButton"
+        android:text="Set period"/>
 
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="If you want to save BLE_data, check this"/>
-        </TableRow>
+    <Button
+        android:id="@+id/button_save_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_selector"
+        android:gravity="center|left"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:textColor="@color/colorSetupButton"
+        android:text="Save data"/>
 
-        <TableRow>
-            <CheckBox
-                android:id="@+id/checkBox_saveData"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="save Data"/>
-        </TableRow>
-        <TableRow>
-            <EditText
-                android:id="@+id/editView_dataName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="export.elxs" />
-        </TableRow>
-    </TableLayout>
-</FrameLayout>
+    <Button
+        android:id="@+id/button_set_auto_shutdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_selector"
+        android:gravity="center|left"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:textColor="@color/colorSetupButton"
+        android:text="Set auto shutdown"/>
+
+    <Button
+        android:id="@+id/button_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_selector"
+        android:gravity="center|left"
+        android:paddingLeft="10dp"
+        android:textSize="18dp"
+        android:textColor="@color/colorSetupButton"
+        android:text="About"/>
+</LinearLayout>

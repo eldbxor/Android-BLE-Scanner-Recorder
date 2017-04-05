@@ -160,7 +160,11 @@ public class BLEScanService extends Service {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-
+            String deviceName;
+            if (result.getDevice().getName() == null)
+                deviceName = "Unknown Device";
+            else
+                deviceName = result.getDevice().getName();
             List<String> separatedData = mBLEServiceUtils.separate(result.getScanRecord().getBytes());
 
             // public DeviceInfo(BluetoothDevice device, String address, String scanRecord, String uuid, String major, String minor, int rssi)
@@ -175,7 +179,7 @@ public class BLEScanService extends Service {
             if (!isContainsBeaconData(result.getDevice().getAddress(), separatedData.get(1))) {
                 Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + result.getDevice().getName() + ", device's address = " + result.getDevice().getAddress() +
                         separatedData.get(1));
-                arr_beaconData.add(new String[]{ result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
+                arr_beaconData.add(new String[]{ deviceName, result.getDevice().getAddress(), separatedData.get(1),
                         separatedData.get(2), separatedData.get(3), separatedData.get(0), String.valueOf(result.getRssi()) });
             }
             /*
@@ -199,6 +203,12 @@ public class BLEScanService extends Service {
     BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+            String deviceName;
+            if (device.getName().equals(null))
+                deviceName = "Unknown Device";
+            else
+                deviceName = device.getName();
+
             String all = "";
             String uuid = "";
             int major_int;
@@ -233,7 +243,7 @@ public class BLEScanService extends Service {
 
             if (!isContainsBeaconData(device.getAddress(), uuid)) {
                 Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + device.getName() + ", device's address = " + device.getAddress());
-                arr_beaconData.add(new String[]{ device.getName(), device.getAddress(), uuid,
+                arr_beaconData.add(new String[]{ deviceName, device.getAddress(), uuid,
                         String.valueOf(major_int), String.valueOf(minor_int), all, String.valueOf(rssi) });
             }
             /*

@@ -3,7 +3,6 @@ package com.example.taek.blescanner_bylyt.UI;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
@@ -11,16 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.taek.blescanner_bylyt.R;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
-import com.example.taek.blescanner_bylyt.Utils.ViewInfo;
 import com.example.taek.blescanner_bylyt.Utils.ViewUtils;
 
 import java.util.Timer;
@@ -35,7 +30,7 @@ public class MainFragment extends Fragment {
     public ViewUtils viewUtils;
     private Switch bLEScanSwitch;
     private ProgressBar progressBar;
-    private TextView numberOfScannedDevice;
+    private TextView tv_numberOfScannedDevice, tv_ScanResult;
     public Context context_mainActivity;
     public boolean isConnectedMessenger, isScanning, isOnUi;
     public Timer timer;
@@ -72,7 +67,8 @@ public class MainFragment extends Fragment {
         viewUtils = new ViewUtils(rootView, R.id.inflatedLayout);
         bLEScanSwitch = (Switch) rootView.findViewById(R.id.BLEScanSwitch);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        numberOfScannedDevice = (TextView) rootView.findViewById(R.id.numberOfScannedDevice);
+        tv_numberOfScannedDevice = (TextView) rootView.findViewById(R.id.numberOfScannedDevice);
+        tv_ScanResult = (TextView) rootView.findViewById(R.id.tvBackgroundTextInMainFrag);
         isOnUi = true;
 
         progressBar.setEnabled(false);
@@ -85,6 +81,9 @@ public class MainFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // switch on
                 if (isChecked) {
+                    tv_ScanResult.setEnabled(false);
+                    tv_ScanResult.setVisibility(View.INVISIBLE);
+
                     // first scanning
                     if (!isConnectedMessenger) {
                         ((MainActivity) context_mainActivity).connectMessenger();
@@ -145,7 +144,9 @@ public class MainFragment extends Fragment {
         super.onPause();
         isOnUi = false;
         Log.d(TAG, "called onPause");
-        timerStop();
+        if (timer != null) {
+            timerStop();
+        }
     }
 
     public void timerStart() {
@@ -179,7 +180,7 @@ public class MainFragment extends Fragment {
         viewUtils.inflateLayout();
 
         // setting a progressBar
-        numberOfScannedDevice.setText(String.valueOf(viewUtils.size()));
+        tv_numberOfScannedDevice.setText(String.valueOf(viewUtils.size()));
         if (viewUtils.size() > 0) {
             progressBar.setEnabled(false);
             progressBar.setVisibility(View.INVISIBLE);
@@ -189,6 +190,13 @@ public class MainFragment extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (timer != null)
+            timerStop();
     }
 
     @Override
