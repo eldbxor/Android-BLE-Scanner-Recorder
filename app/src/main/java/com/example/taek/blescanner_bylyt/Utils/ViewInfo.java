@@ -52,6 +52,13 @@ public class ViewInfo {
 
         devisionLine = new View(rootView.getContext());
 
+        tvDeviceName.setTextColor(Color.WHITE);
+        tvDeviceAddress.setTextColor(Color.WHITE);
+        tvUuid.setTextColor(Color.WHITE);
+        tvMajor.setTextColor(Color.WHITE);
+        tvMinor.setTextColor(Color.WHITE);
+        tvAll.setTextColor(Color.WHITE);
+        tvRssi.setTextColor(Color.WHITE);
         tvDeviceName.setText("DeviceName");
         tvDeviceAddress.setText("DeviceAddress");
         tvUuid.setText("UUID");
@@ -76,13 +83,13 @@ public class ViewInfo {
         tvLabelMinor.setPadding(0, 0, 15, 0);
         tvLabelAll.setPadding(0, 0, 15, 0);
         tvLabelRssi.setPadding(0, 0, 15, 0);
-        tvLabelDeviceName.setTextColor(Color.BLACK);
-        tvLabelDeviceAddress.setTextColor(Color.BLACK);
-        tvLabelUuid.setTextColor(Color.BLACK);
-        tvLabelMajor.setTextColor(Color.BLACK);
-        tvLabelMinor.setTextColor(Color.BLACK);
-        tvLabelAll.setTextColor(Color.BLACK);
-        tvLabelRssi.setTextColor(Color.BLACK);
+        tvLabelDeviceName.setTextColor(Color.WHITE);
+        tvLabelDeviceAddress.setTextColor(Color.WHITE);
+        tvLabelUuid.setTextColor(Color.WHITE);
+        tvLabelMajor.setTextColor(Color.WHITE);
+        tvLabelMinor.setTextColor(Color.WHITE);
+        tvLabelAll.setTextColor(Color.WHITE);
+        tvLabelRssi.setTextColor(Color.WHITE);
         tvLabelDeviceName.setText("DeviceName");
         tvLabelDeviceAddress.setText("DeviceAddress");
         tvLabelUuid.setText("UUID");

@@ -6,6 +6,6 @@
             android:title="HOME" />
         <item
             android:id="@+id/nav_setup"
-            android:title="설정" />
+            android:title="Setting" />
     </group>
 </menu>
