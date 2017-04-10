@@ -22,12 +22,14 @@ public class BLEServiceUtils {
     public BluetoothManager mBluetoothManager;
     public BluetoothAdapter mBluetoothAdapter;
     public BluetoothLeScanner mBLEScanner; // BLE 스캐너(api 21 이상)
+    public List<BLEData> list_BLEData;
     private Context context_BLEScanService;
     private String TAG = "BLEServiceUtils";
 
     // 생성자
     public BLEServiceUtils(Context context) {
         context_BLEScanService = context;
+        list_BLEData = new ArrayList<>();
         Log.d(TAG, "BLEServiceUtils(): 생성자");
     }
 
