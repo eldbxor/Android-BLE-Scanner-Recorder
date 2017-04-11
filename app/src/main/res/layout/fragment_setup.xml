@@ -37,17 +37,6 @@
         android:text="Save data"/>
 
     <Button
-        android:id="@+id/button_set_auto_shutdown"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
-        android:gravity="center|left"
-        android:paddingLeft="10dp"
-        android:textSize="18dp"
-        android:textColor="@color/colorSetupButton"
-        android:text="Set auto shutdown"/>
-
-    <Button
         android:id="@+id/button_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

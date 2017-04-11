@@ -12,7 +12,7 @@
     <color name="colorGreen">#4CAF50</color>
     <color name="colorBlack">#000000</color>
     <color name="colorSetupButton">#303F9F</color>
-    <color name="colorScrollView">#5C6BC0</color>
+    <color name="colorScrollView">#3F51B5</color>
     <drawable name="bg_select">#2196F3</drawable>
     <drawable name="bg">#EEEEEE</drawable>
 </resources>
