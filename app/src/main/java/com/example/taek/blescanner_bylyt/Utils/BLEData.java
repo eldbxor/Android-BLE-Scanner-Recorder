@@ -5,15 +5,16 @@ package com.example.taek.blescanner_bylyt.Utils;
  */
 
 public class BLEData {
-    private String deviceName;
-    private String deviceAddress;
-    private String uuid;
-    private String major;
-    private String minor;
-    private String allData;
-    private String rssi;
+    public String deviceName;
+    public String deviceAddress;
+    public String uuid;
+    public String major;
+    public String minor;
+    public String allData;
+    public String rssi;
+    public String currentTime;
 
-    public BLEData(String deviceName, String deviceAddress, String uuid, String major, String minor, String allData, String rssi) {
+    public BLEData(String deviceName, String deviceAddress, String uuid, String major, String minor, String allData, String rssi, String currentTime) {
         this.deviceName = deviceName;
         this.deviceAddress = deviceAddress;
         this.uuid = uuid;
@@ -21,5 +22,6 @@ public class BLEData {
         this.minor = minor;
         this.allData = allData;
         this.rssi = rssi;
+        this.currentTime = currentTime;
     }
 }

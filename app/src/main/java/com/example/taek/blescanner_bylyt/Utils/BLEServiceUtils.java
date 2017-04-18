@@ -46,6 +46,10 @@ public class BLEServiceUtils {
         }
     }
 
+    public void addBLEData(String deviceName, String deviceAddress, String uuid, String major, String minor, String allData, String rssi, String dateTime) {
+        list_BLEData.add(new BLEData(deviceName, deviceAddress, uuid, major, minor, allData, rssi, dateTime));
+    }
+
     // send Activity Beacon data from service
     public void sendBeaconDataToActivity(ArrayList<String[]> arr_BeaconData) {
         Log.d(TAG, "sendBeaconDataToActivity: send arr_BeaconData to activity, arr_BeaconData's size = " + String.valueOf(arr_BeaconData.size()));

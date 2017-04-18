@@ -20,8 +20,11 @@ import com.example.taek.blescanner_bylyt.Utils.BLEServiceUtils;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
 import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -182,6 +185,9 @@ public class BLEScanService extends Service {
                 arr_beaconData.add(new String[]{ deviceName, result.getDevice().getAddress(), separatedData.get(1),
                         separatedData.get(2), separatedData.get(3), separatedData.get(0), String.valueOf(result.getRssi()) });
             }
+
+            mBLEServiceUtils.addBLEData(deviceName, result.getDevice().getAddress(), separatedData.get(1), separatedData.get(2),
+                    separatedData.get(3), separatedData.get(0), String.valueOf(result.getRssi()), getCurrentTime());
             /*
             // send activity beacon's data from service
             mBLEServiceUtils.sendBeaconDataToActivity(result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
@@ -246,6 +252,9 @@ public class BLEScanService extends Service {
                 arr_beaconData.add(new String[]{ deviceName, device.getAddress(), uuid,
                         String.valueOf(major_int), String.valueOf(minor_int), all, String.valueOf(rssi) });
             }
+
+            mBLEServiceUtils.addBLEData(deviceName, device.getAddress(), uuid, String.valueOf(major_int), String.valueOf(minor_int),
+                    all, String.valueOf(rssi), getCurrentTime());
             /*
             // send activity beacon's data from service
             mBLEServiceUtils.sendBeaconDataToActivity(device.getName(), device.getAddress(), uuid,
@@ -253,6 +262,16 @@ public class BLEScanService extends Service {
 
         }
     };
+
+    public String getCurrentTime() {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        String strDate = dateFormat.format(date);
+
+        return strDate;
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
