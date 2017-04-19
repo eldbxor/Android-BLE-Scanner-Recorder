@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,6 +63,7 @@ public class ExcelWriter {
         }
 
         if ( workbook != null) {
+            Log.d(TAG, "readFile(): read " + fileName);
             sheet = workbook.getSheetAt(0);
 
             if (sheet != null) {
@@ -87,7 +89,7 @@ public class ExcelWriter {
         return true; // the workbook have the file's name exist.
     }
 
-    public void writeFile(List<BLEData> list_BLEData) {
+    public void writeFile(ArrayList<BLEData> list_BLEData) {
         if (isNewFile()) {
             // Cell style for header row
             CellStyle cs = workbook.createCellStyle();

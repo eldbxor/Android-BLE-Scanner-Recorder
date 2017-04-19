@@ -6,6 +6,7 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
@@ -22,7 +23,8 @@ public class BLEServiceUtils {
     public BluetoothManager mBluetoothManager;
     public BluetoothAdapter mBluetoothAdapter;
     public BluetoothLeScanner mBLEScanner; // BLE 스캐너(api 21 이상)
-    public List<BLEData> list_BLEData;
+    public ArrayList<BLEData> list_BLEData;
+    public ExcelWriter excelWriter;
     private Context context_BLEScanService;
     private String TAG = "BLEServiceUtils";
 
@@ -30,6 +32,7 @@ public class BLEServiceUtils {
     public BLEServiceUtils(Context context) {
         context_BLEScanService = context;
         list_BLEData = new ArrayList<>();
+        excelWriter = new ExcelWriter(context);
         Log.d(TAG, "BLEServiceUtils(): 생성자");
     }
 
@@ -48,6 +51,20 @@ public class BLEServiceUtils {
 
     public void addBLEData(String deviceName, String deviceAddress, String uuid, String major, String minor, String allData, String rssi, String dateTime) {
         list_BLEData.add(new BLEData(deviceName, deviceAddress, uuid, major, minor, allData, rssi, dateTime));
+    }
+
+    public void writeExcelFile(final boolean scanStop) {
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (list_BLEData.size() > 100 || scanStop) {
+                    ArrayList<BLEData> temp = (ArrayList<BLEData>) list_BLEData.clone();
+                    excelWriter.writeFile(temp);
+                    list_BLEData.clear();
+                }
+            }
+        });
     }
 
     // send Activity Beacon data from service

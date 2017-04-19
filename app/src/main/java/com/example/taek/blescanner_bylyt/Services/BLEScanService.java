@@ -96,6 +96,7 @@ public class BLEScanService extends Service {
             }
 
             timerStart();
+            mBLEServiceUtils.excelWriter.readFile("beacon_data.xls");
         }else{
             if (Build.VERSION.SDK_INT < 21) {
                 // 롤리팝 이전버전
@@ -106,6 +107,7 @@ public class BLEScanService extends Service {
             }
 
             timerStop();
+            mBLEServiceUtils.writeExcelFile(true);
         }
     }
 
@@ -188,6 +190,11 @@ public class BLEScanService extends Service {
 
             mBLEServiceUtils.addBLEData(deviceName, result.getDevice().getAddress(), separatedData.get(1), separatedData.get(2),
                     separatedData.get(3), separatedData.get(0), String.valueOf(result.getRssi()), getCurrentTime());
+
+            if (mBLEServiceUtils.list_BLEData.size() > 100) {
+                mBLEServiceUtils.writeExcelFile(false);
+            }
+
             /*
             // send activity beacon's data from service
             mBLEServiceUtils.sendBeaconDataToActivity(result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
@@ -255,6 +262,10 @@ public class BLEScanService extends Service {
 
             mBLEServiceUtils.addBLEData(deviceName, device.getAddress(), uuid, String.valueOf(major_int), String.valueOf(minor_int),
                     all, String.valueOf(rssi), getCurrentTime());
+
+            if (mBLEServiceUtils.list_BLEData.size() > 100) {
+                mBLEServiceUtils.writeExcelFile(false);
+            }
             /*
             // send activity beacon's data from service
             mBLEServiceUtils.sendBeaconDataToActivity(device.getName(), device.getAddress(), uuid,
