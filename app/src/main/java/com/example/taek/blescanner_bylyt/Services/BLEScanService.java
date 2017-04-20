@@ -278,7 +278,7 @@ public class BLEScanService extends Service {
         long now = System.currentTimeMillis();
         Date date = new Date(now);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String strDate = dateFormat.format(date);
 
         return strDate;

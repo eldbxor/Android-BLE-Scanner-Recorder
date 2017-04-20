@@ -114,6 +114,14 @@ public class ViewInfo {
         trRssi.addView(tvLabelRssi);
         trRssi.addView(tvRssi);
 
+        // set up ColumnStretchable
+        TableRow.LayoutParams tvLayoutParams = new TableRow.LayoutParams();
+        tvLayoutParams.weight = 1;
+        tvUuid.setLayoutParams(tvLayoutParams);
+        tvAll.setLayoutParams(tvLayoutParams);
+        tableLayout.setColumnStretchable(2, true);
+        tableLayout.setColumnStretchable(5, true);
+
         // add tableRow to tableLayout
         tableLayout.addView(trDeviceName);
         tableLayout.addView(trDeviceAddress);
@@ -139,18 +147,10 @@ public class ViewInfo {
     public void setText() {
         tvDeviceName.setText(strDeviceName);
         tvDeviceAddress.setText(strDeviceAddress);
-        String strDeviceAddress1, strDeviceAddress2;
-        strDeviceAddress1 = strUuid.substring(0, 42);
-        strDeviceAddress2 = strUuid.substring(42, strUuid.length());
-        tvUuid.setText(strDeviceAddress1);
-        tvUuid.append("\n" + strDeviceAddress2);
+        tvUuid.setText(strUuid);
         tvMajor.setText(strMajor);
         tvMinor.setText(strMinor);
-        String strAll1, strAll2;
-        strAll1 = strAll.substring(0, 42);
-        strAll2 = strAll.substring(42, strAll.length());
-        tvAll.setText(strAll1);
-        tvAll.append("\n" + strAll2);
+        tvAll.setText(strAll);
         tvRssi.setText(strRssi);
     }
 

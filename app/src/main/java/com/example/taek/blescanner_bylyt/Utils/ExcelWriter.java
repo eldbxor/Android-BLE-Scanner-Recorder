@@ -93,7 +93,7 @@ public class ExcelWriter {
         if (isNewFile()) {
             // Cell style for header row
             CellStyle cs = workbook.createCellStyle();
-            cs.setFillBackgroundColor(HSSFColor.LIME.index);
+            cs.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
             cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             // Generate column headings

@@ -41,7 +41,7 @@ public class IncomingHandler extends android.os.Handler {
                          */
                         // ArrayList arr = (ArrayList) msg.obj;
                         String[] beaconData = (String[]) msg.obj;
-                        Log.d(TAG, "handleMessageTypeActivity: receive beacon's data, size = " + beaconData.length);
+                        Log.d(TAG, "handleMessageTypeActivity: receive beacon's data");
                         ((MainActivity) mContext).fragMain.viewUtils.updateViewInfo(beaconData);
 
                         break;
