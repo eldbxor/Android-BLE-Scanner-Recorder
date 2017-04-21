@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -11,22 +12,98 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="If you want to save BLE_data, check this"/>
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="5dp"
+                android:textSize="15dp"
+                android:text="Save Excel File"
+                android:textColor="@color/colorSetupText"/>
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGray"
+                android:text="If you want to save Excel File, check this"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingLeft="10dp">
             <CheckBox
                 android:id="@+id/checkBox_saveData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:text="save Data"/>
         </TableRow>
-        <TableRow>
+
+        <TableRow
+            android:paddingTop="20dp"
+            android:paddingLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGray"
+                android:text="File Name"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingLeft="10dp">
             <EditText
                 android:id="@+id/editView_dataName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="export.elxs" />
+                android:textSize="20dp"
+                android:text="export" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/colorBlack"
+                android:text=".xls"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingTop="20dp"
+            android:paddingLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGray"
+                android:text="Save Position"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:textSize="20dp"
+                android:text="/Android/file/"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingTop="20dp"
+            android:paddingLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGray"
+                android:text="Set Close Timer"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="50dp"
+                android:text="00:00:00"/>
         </TableRow>
     </TableLayout>
 </FrameLayout>

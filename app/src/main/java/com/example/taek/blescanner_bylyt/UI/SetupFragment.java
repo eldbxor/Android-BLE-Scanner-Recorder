@@ -1,6 +1,7 @@
 package com.example.taek.blescanner_bylyt.UI;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,10 @@ public class SetupFragment extends Fragment {
     private View rootView;
     Context context_mainActivity;
     private Button button_setupPeriod, button_saveData, button_about;
+    public SetPeriodFragment fragSetPeriod;
+    public SaveExcelFileFragment fragSaveExcelFile;
+    public AboutFragment fragAbout;
+    public FragmentManager fragmentManager;
 
 /*
     public static SetupFragment newInstance() {
@@ -41,6 +46,15 @@ public class SetupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_setup, container, false);
 
+        fragmentManager = ((MainActivity) context_mainActivity).getFragmentManager();
+
+        fragSetPeriod = new SetPeriodFragment();
+        fragSaveExcelFile = new SaveExcelFileFragment();
+        fragAbout = new AboutFragment();
+        fragSetPeriod.sendContext(context_mainActivity);
+        fragSaveExcelFile.sendContext(context_mainActivity);
+        fragAbout.sendContext(context_mainActivity);
+
         button_setupPeriod = (Button) rootView.findViewById(R.id.button_set_period);
         button_saveData = (Button) rootView.findViewById(R.id.button_save_data);
         button_about = (Button) rootView.findViewById(R.id.button_about);
@@ -48,21 +62,33 @@ public class SetupFragment extends Fragment {
         button_setupPeriod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(rootView.getContext(), "Not yet created", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragSetPeriod)
+                        .detach(fragSetPeriod).attach(fragSetPeriod)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
         button_saveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(rootView.getContext(), "Not yet created", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragSaveExcelFile)
+                        .detach(fragSaveExcelFile).attach(fragSaveExcelFile)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
         button_about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(rootView.getContext(), "Not yet created", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragAbout)
+                        .detach(fragAbout).attach(fragAbout)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

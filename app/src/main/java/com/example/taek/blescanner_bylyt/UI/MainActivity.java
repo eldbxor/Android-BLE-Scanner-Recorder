@@ -169,10 +169,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Fragments
         fragMain = new MainFragment();
         fragMain.sendContext(context_mainActivity);
-        // fragMain = MainFragment.newInstance(context_mainActivity);
         fragSetup = new SetupFragment();
         fragSetup.sendContext(context_mainActivity);
-        //fragSetup = SetupFragment.newInstance();
 
         // DrawerLayout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -202,12 +200,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /* Essential overriding methods */
     @Override
     public void onBackPressed() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
         } else {
-            // super.onBackPressed();
-            backPressCloseHandler.onBackPressed();
+            drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                // super.onBackPressed();
+                backPressCloseHandler.onBackPressed();
+            }
         }
     }
 
@@ -242,12 +244,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id) {
             case R.id.nav_main:
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStack();
+                }
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, fragMain)
                         .detach(fragMain).attach(fragMain)
                         .commit();
                 break;
             case R.id.nav_setup:
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStack();
+                }
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, fragSetup)
                         .detach(fragSetup).attach(fragSetup)
