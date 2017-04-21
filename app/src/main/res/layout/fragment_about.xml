@@ -37,7 +37,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:text="This app scan and record advertising bluetooth data. you can change scan period. Scan periods are Low Latency, Balanced, Low Power and Opportunistic. Also you can save scan result to excel form(.xls). You can rename excel file and if it have same file’s name already existed, It will be writed subsequently. If you want to save scan result during specific time, you can use auto close timer."/>
+            android:text="This app scans and records advertising bluetooth data.
+you can also change the scanning period. The scanning periods are Low Latency, Balanced, Low Power and Opportunistic.
+you can save scan results to excel form(.xls). You can rename an excel file.
+if it has the same file name that already exists, it will be written subsequently.
+If you want to save scan results for a specific time, you can use the auto close timer."/>
 
         <TableLayout
             android:layout_width="wrap_content"
