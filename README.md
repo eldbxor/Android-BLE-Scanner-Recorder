@@ -1,7 +1,4 @@
 # About this app
-This app is a service that checks commuting using the beacons automatically. <br />
-api version is available from 19 (kitkat) to 23 (Marshmallow).
-
 This app scan and record advertising bluetooth data. <br />
 you can change scan period. Scan periods are Low Latency, Balanced, Low Power and Opportunistic. <br />
 Also you can save scan result to excel form(.xls). <br />
