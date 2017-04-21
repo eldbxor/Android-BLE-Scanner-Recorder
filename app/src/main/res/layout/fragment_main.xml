@@ -30,11 +30,6 @@
         </TableRow>
     </TableLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorGray"/>
-
     <!-- Inflate 할 레이아웃 영역 -->
     <ScrollView
         android:layout_width="match_parent"

@@ -2,72 +2,88 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal|center_vertical">
-
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@mipmap/ic_launcher"/>
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
-        android:textSize="20dp"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/app_name"/>
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
+        android:textSize="15dp"
+        android:text="About"
+        android:textColor="@color/colorSetupText"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="explain this app"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical">
 
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp">
-        <TableRow>
-            <TextView
-                android:gravity="right"
-                android:text="Github: "/>
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@mipmap/ic_launcher"/>
 
-            <TextView
-                android:autoLink="web"
-                android:text="https://github.com/eldbxor/BLEScanner_ByLYT"/>
-        </TableRow>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/app_name"/>
 
-        <TableRow>
-            <TextView
-                android:gravity="right"
-                android:text="Blog: "/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="This app scan and record advertising bluetooth data. you can change scan period. Scan periods are Low Latency, Balanced, Low Power and Opportunistic. Also you can save scan result to excel form(.xls). You can rename excel file and if it have same file’s name already existed, It will be writed subsequently. If you want to save scan result during specific time, you can use auto close timer."/>
 
-            <TextView
-                android:autoLink="web"
-                android:text="http://dutax.tistory.com/"/>
-        </TableRow>
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp">
+            <TableRow>
+                <TextView
+                    android:gravity="right"
+                    android:text="Github: "/>
 
-        <TableRow>
-            <TextView
-                android:gravity="right"
-                android:text="Email: "/>
+                <TextView
+                    android:autoLink="web"
+                    android:text="https://github.com/eldbxor/BLEScanner_ByLYT"/>
+            </TableRow>
 
-            <TextView
-                android:autoLink="email"
-                android:text="eldbxor@naver.com"/>
-        </TableRow>
-    </TableLayout>
+            <TableRow>
+                <TextView
+                    android:gravity="right"
+                    android:text="Blog: "/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="Developed by Lee Yoo Taek"/>
+                <TextView
+                    android:autoLink="web"
+                    android:text="http://dutax.tistory.com/"/>
+            </TableRow>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="Version 1.0.1"/>
+            <TableRow>
+                <TextView
+                    android:gravity="right"
+                    android:text="Email: "/>
+
+                <TextView
+                    android:autoLink="email"
+                    android:text="eldbxor@naver.com"/>
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Developed by Lee Yoo Taek"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Version 1.0.1"/>
+    </LinearLayout>
 </LinearLayout>

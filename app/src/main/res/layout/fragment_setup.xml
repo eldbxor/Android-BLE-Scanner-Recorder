@@ -34,7 +34,7 @@
         android:paddingLeft="10dp"
         android:textSize="18dp"
         android:textColor="@color/colorSetupButton"
-        android:text="Save data"/>
+        android:text="Save Scan Result"/>
 
     <Button
         android:id="@+id/button_about"
