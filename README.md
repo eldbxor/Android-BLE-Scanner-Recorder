@@ -1,9 +1,9 @@
 # About this app
-This app scan and record advertising bluetooth data. <br />
-you can change scan period. Scan periods are Low Latency, Balanced, Low Power and Opportunistic. <br />
-Also you can save scan result to excel form(.xls). <br />
-You can rename excel file and if it have same file’s name already existed, It will be writed subsequently. <br />
-If you want to save scan result during specific time, you can use auto close timer.
+This app scans and records advertising bluetooth data. <br />
+you can also change the scanning period. The scanning periods are Low Latency, Balanced, Low Power and Opportunistic. <br />
+you can save scan results to excel form(.xls). You can rename an excel file. <br />
+if it has the same file name that already exists, it will be written subsequently. <br />
+If you want to save scan results for a specific time, you can use the auto close timer.
 
 # Contacts
 Created by Lee Yootaek <br />
