@@ -18,4 +18,5 @@ public class Constants {
     // 서비스에서 받는 message
     public static final int HANDLE_MESSAGE_TYPE_BLE_SCAN = 1;
     public static final int HANDLE_MESSAGE_TYPE_STOP_SCAN = 2;
+    public static final int HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD = 3;
 }

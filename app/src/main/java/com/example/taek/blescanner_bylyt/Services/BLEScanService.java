@@ -32,10 +32,11 @@ public class BLEScanService extends Service {
     private ScanSettings mScanSetting;
     private List<ScanFilter> mScanFilter;
     private String TAG = "BLEScanService";
-    private BLEServiceUtils mBLEServiceUtils;
+    public BLEServiceUtils mBLEServiceUtils;
     private Context serviceContext;
     public Messenger replyToActivityMessenger; // Activity에 응답하기 위한 Messenger
     public boolean isConnectedMessenger; // Activity와 Service가 연결되었는지 확인
+    public boolean isScanning; // 스캔 중인지 확인
     public ArrayList<String[]> arr_beaconData;
     private Timer timer;
     private TimerTask timerTask;
@@ -54,6 +55,7 @@ public class BLEScanService extends Service {
         mScanFilter = new ArrayList<>();
         arr_beaconData = new ArrayList<>();
         isConnectedMessenger = false;
+        isScanning = false;
 
         mBLEServiceUtils.createBluetoothAdapter(getSystemService(this.BLUETOOTH_SERVICE)); // Bluetooth Adapter 생성
         mBLEServiceUtils.enableBluetooth(); // Bluetooth 사용
@@ -88,6 +90,8 @@ public class BLEScanService extends Service {
 
     public void scanBLEDevice(final boolean enable) {
         if (enable){
+            isScanning = true;
+
             if (Build.VERSION.SDK_INT < 21) {
                 // 롤리팝 이전버전
                 mBLEServiceUtils.mBluetoothAdapter.startLeScan(mLeScanCallback);
@@ -98,6 +102,8 @@ public class BLEScanService extends Service {
             timerStart();
             mBLEServiceUtils.excelWriter.readFile("beacon_data.xls");
         }else{
+            isScanning = false;
+
             if (Build.VERSION.SDK_INT < 21) {
                 // 롤리팝 이전버전
                 mBLEServiceUtils.mBluetoothAdapter.stopLeScan(mLeScanCallback);

@@ -3,106 +3,99 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingBottom="5dp"
-        android:textSize="15dp"
-        android:text="Save Scan Result"
-        android:textColor="@color/colorSetupText"/>
+        android:background="@color/colorGray">
+        <TextView
+            android:id="@+id/tvRecording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:textSize="25dp"
+            android:textColor="@color/colorWhite"
+            android:text="Recording"/>
 
-    <TableLayout
+        <Switch
+            android:id="@+id/switch_recording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvRecording"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/switch_recording"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorWhite"
+            android:text="If you want to record the scanning results, swith on"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvExcelFileDirectory"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/BLEScanSwitch">
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"
+        android:text="The excel file's extension is '.xml' and the file is placed inside "/>
 
-        <TableRow
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
-                android:text="If you want to save Excel File, check this"/>
-        </TableRow>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:hint="Write an excel file name"/>
 
-        <TableRow
-            android:paddingLeft="10dp">
-            <CheckBox
-                android:id="@+id/checkBox_saveData"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="save Data"/>
-        </TableRow>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp">
+        <TextView
+            android:id="@+id/tvAutoCloseTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorGreen"
+            android:text="Auto close timer"/>
 
-        <TableRow
-            android:paddingTop="20dp"
-            android:paddingLeft="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
-                android:text="File Name"/>
-        </TableRow>
-
-        <TableRow
-            android:paddingLeft="10dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvAutoCloseTimer"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
             <EditText
-                android:id="@+id/editView_dataName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="export" />
+                android:textSize="30dp"
+                android:text="00"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/colorBlack"
-                android:text=".xls"/>
-        </TableRow>
+                android:textSize="30dp"
+                android:text=":"/>
 
-        <TableRow
-            android:paddingTop="20dp"
-            android:paddingLeft="10dp">
-            <TextView
-                android:layout_width="match_parent"
+            <EditText
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
-                android:text="Save Position"/>
-        </TableRow>
+                android:textSize="30dp"
+                android:text="00"/>
 
-        <TableRow
-            android:paddingLeft="10dp">
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:textSize="20dp"
-                android:text="/Android/file/"/>
-        </TableRow>
+                android:textSize="30dp"
+                android:text=":"/>
 
-        <TableRow
-            android:paddingTop="20dp"
-            android:paddingLeft="10dp">
-            <TextView
-                android:layout_width="match_parent"
+            <EditText
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorGray"
-                android:text="Set Close Timer"/>
-        </TableRow>
-
-        <TableRow
-            android:paddingLeft="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="50dp"
-                android:text="00:00:00"/>
-        </TableRow>
-    </TableLayout>
+                android:textSize="30dp"
+                android:text="00"/>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

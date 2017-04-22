@@ -1,8 +1,11 @@
 package com.example.taek.blescanner_bylyt.UI;
 
 import android.app.Fragment;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Message;
+import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.taek.blescanner_bylyt.R;
+import com.example.taek.blescanner_bylyt.Utils.Constants;
 
 /**
  * Created by eldbx on 2017-04-21.
@@ -41,19 +45,45 @@ public class SetPeriodFragment extends Fragment {
         rbLowPower = (RadioButton) rootView.findViewById(R.id.radioButton_LowPower);
         rbOpportunistic = (RadioButton) rootView.findViewById(R.id.radioButton_Opportunistic);
 
+        // ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN));
+
         RadioButton.OnClickListener optionOnClickListener = new RadioButton.OnClickListener() {
             public void onClick(View v) {
                 if (rbLowLatency.isChecked()) {
-                    Toast.makeText(context_mainActivity, "Low Latency is checked", Toast.LENGTH_SHORT).show();
+                    try {
+                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_LOW_LATENCY));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(context_mainActivity, "Scan mode is Low Latency", Toast.LENGTH_SHORT).show();
                 }
                 else if (rbBalanced.isChecked()) {
-                    Toast.makeText(context_mainActivity, "Balanced is checked", Toast.LENGTH_SHORT).show();
+                    try {
+                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_BALANCED));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(context_mainActivity, "Scan mode is Balanced", Toast.LENGTH_SHORT).show();
                 }
                 else if (rbLowPower.isChecked()) {
-                    Toast.makeText(context_mainActivity, "Low Power is checked", Toast.LENGTH_SHORT).show();
+                    try {
+                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_LOW_POWER));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(context_mainActivity, "Scan mode is Low Power", Toast.LENGTH_SHORT).show();
                 }
                 else if (rbOpportunistic.isChecked()) {
-                    Toast.makeText(context_mainActivity, "Opportunistic is checked", Toast.LENGTH_SHORT).show();
+                    try {
+                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_OPPORTUNISTIC));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(context_mainActivity, "Scan mode is Opportunistic", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -61,7 +91,6 @@ public class SetPeriodFragment extends Fragment {
         rbBalanced.setOnClickListener(optionOnClickListener);
         rbLowPower.setOnClickListener(optionOnClickListener);
         rbOpportunistic.setOnClickListener(optionOnClickListener);
-
 
         return rootView;
     }

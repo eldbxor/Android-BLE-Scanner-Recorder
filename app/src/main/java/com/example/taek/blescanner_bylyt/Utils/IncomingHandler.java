@@ -67,6 +67,18 @@ public class IncomingHandler extends android.os.Handler {
                     case Constants.HANDLE_MESSAGE_TYPE_STOP_SCAN:
                         Log.d(TAG, "Service received handleMessage: stop scan");
                         mBLEScanService.scanBLEDevice(false);
+
+                        break;
+
+                    case Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD:
+                        Log.d(TAG, "Service received handleMessage: change the scanning period");
+                        int scanMode = (int) msg.obj;
+                        if (((BLEScanService) mContext).isScanning) {
+                            ((BLEScanService) mContext).restartScan(scanMode);
+                        } else {
+                            ((BLEScanService) mContext).mBLEServiceUtils.setPeriod(scanMode);
+                        }
+                        break;
                 }
                 break;
         }
