@@ -55,7 +55,7 @@
         android:id="@+id/editText_FileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Write an excel file name (ex. scanResult)"/>
+        android:hint="Write an excel file name (ex. data.xls)"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -79,6 +79,7 @@
             android:layout_centerHorizontal="true"/>
 
         <LinearLayout
+            android:id="@+id/linearLayout_AutoClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/switch_AutoCloseTimer"
@@ -123,5 +124,14 @@
                 android:textSize="30dp"
                 android:text="00"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/testText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayout_AutoClose"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="When you return, it will be applied"/>
     </RelativeLayout>
 </LinearLayout>

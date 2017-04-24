@@ -14,6 +14,7 @@ public class Constants {
 
     // 액티비티에서 받는 message
     public static final int HANDLE_MESSAGE_TYPE_SEND_ACTIVITY_BLE_DATA = 1;
+    public static final int HANDLE_MESSAGE_TYPE_AUTO_CLOSE_TIME = 2;
 
     // 서비스에서 받는 message
     public static final int HANDLE_MESSAGE_TYPE_BLE_SCAN = 1;
@@ -32,11 +33,4 @@ public class Constants {
 
     public static final int AUTO_CLOSE_SWITCH_ON = 1;
     public static final int AUTO_CLOSE_SWITCH_OFF = 0;
-
-    public static final int SCAN_PERIOD_LOW_LATENCY = 0;
-    public static final int SCAN_PERIOD_BALANCED = 1;
-    public static final int SCAN_PERIOD_LOW_POWER = 2;
-    public static final int SCAN_PERIOD_OPPORTUNISTIC = 3;
-
-
 }

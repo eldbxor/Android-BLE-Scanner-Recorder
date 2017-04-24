@@ -27,6 +27,7 @@ import java.util.List;
 
 public class ExcelWriter {
     private  String TAG = "ExcelWriter";
+    private String fileName;
     private HSSFWorkbook workbook;
     private HSSFSheet sheet;
     private HSSFRow row;
@@ -41,10 +42,12 @@ public class ExcelWriter {
     public ExcelWriter(Context context) {
         this.context = context;
         isNewFile = false;
+        this.fileName = "";
     }
 
     public boolean readFile(String fileName) {
         // set up all variable to null or 0
+        this.fileName = "";
         workbook = null;
         sheet = null;
         row = null;
@@ -54,7 +57,13 @@ public class ExcelWriter {
         fos = null;
         lastRowNum = 0;
 
-        file = new File(context.getExternalFilesDir(null), fileName);
+        if (fileName.equals("")) {
+            this.fileName = "data.xls";
+        } else {
+            this.fileName = fileName;
+        }
+
+        file = new File(context.getExternalFilesDir(null), this.fileName);
         try {
             fin = new FileInputStream(file);
             workbook = new HSSFWorkbook(fin);
@@ -63,7 +72,7 @@ public class ExcelWriter {
         }
 
         if ( workbook != null) {
-            Log.d(TAG, "readFile(): read " + fileName);
+            Log.d(TAG, "readFile(): read " + this.fileName);
             sheet = workbook.getSheetAt(0);
 
             if (sheet != null) {
@@ -90,6 +99,11 @@ public class ExcelWriter {
     }
 
     public void writeFile(ArrayList<BLEData> list_BLEData) {
+        // scanning 중에 엑셀파일로 저장할 파일명이 바뀔 경우 or workbook이 null일 경우
+        if (!fileName.equals(DBUtils.fileName) || workbook == null) {
+            readFile(DBUtils.fileName);
+        }
+
         if (isNewFile()) {
             // Cell style for header row
             CellStyle cs = workbook.createCellStyle();

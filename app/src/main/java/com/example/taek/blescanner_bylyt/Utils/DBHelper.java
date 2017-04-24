@@ -1,5 +1,6 @@
 package com.example.taek.blescanner_bylyt.Utils;
 
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -34,9 +35,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // 초기 설정 값: scan_period = 0(Low Latency), is_record = 0(false), file_name = scanResult, is_auto_close = 0(false), auto_close_time = 000000
         db.execSQL("INSERT INTO setting VALUES(null, '" +
-                Constants.SCAN_PERIOD_LOW_LATENCY + "', '" +
+                ScanSettings.SCAN_MODE_LOW_LATENCY + "', '" +
                 Constants.RECORDING_SWITCH_OFF + "', '" +
-                "scanResult" + "', '" +
+                "" + "', '" +
                 Constants.AUTO_CLOSE_SWITCH_OFF + "', '" +
                 "000000" + "');");
     }

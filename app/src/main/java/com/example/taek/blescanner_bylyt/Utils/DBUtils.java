@@ -1,5 +1,6 @@
 package com.example.taek.blescanner_bylyt.Utils;
 
+import android.bluetooth.le.ScanSettings;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -40,9 +41,9 @@ public class DBUtils {
          */
         if (cursor.getCount() == 0) {
             db.execSQL("INSERT INTO setting VALUES(null, '" +
-                    Constants.SCAN_PERIOD_LOW_LATENCY + "', '" +
+                    ScanSettings.SCAN_MODE_LOW_LATENCY + "', '" +
                     Constants.RECORDING_SWITCH_OFF + "', '" +
-                    "scanResult" + "', '" +
+                    "" + "', '" +
                     Constants.AUTO_CLOSE_SWITCH_OFF + "', '" +
                     "000000" + "');");
             cursor = db.rawQuery("SELECT scan_period, is_record, file_name, is_auto_close, auto_close_time FROM setting " +
@@ -61,6 +62,7 @@ public class DBUtils {
         Log.d(TAG, "cursor's count = " + String.valueOf(cursor.getCount()));
         Log.d(TAG, "scanPeriod = " + String.valueOf(scanPeriod) + ", isRecord = " + String.valueOf(isRecord) + ", fileName = " +
                 fileName + ", isAutoClose = " + String.valueOf(isAutoClose) + ", autoCloseTime = " + autoCloseTime);
+        cursor.close();
     }
 
     public static void update(int database_Number, Object obj) {

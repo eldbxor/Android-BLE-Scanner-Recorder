@@ -46,22 +46,20 @@ public class SetPeriodFragment extends Fragment {
         rbLowPower = (RadioButton) rootView.findViewById(R.id.radioButton_LowPower);
         rbOpportunistic = (RadioButton) rootView.findViewById(R.id.radioButton_Opportunistic);
 
-        // ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN));
-
         switch (DBUtils.scanPeriod) {
-            case 0: // Low Latency
+            case ScanSettings.SCAN_MODE_LOW_LATENCY: // Low Latency
                 rbLowLatency.setChecked(true);
                 break;
 
-            case 1: // Balanced
+            case ScanSettings.SCAN_MODE_BALANCED: // Balanced
                 rbBalanced.setChecked(true);
                 break;
 
-            case 2: // Low Power
+            case ScanSettings.SCAN_MODE_LOW_POWER: // Low Power
                 rbLowPower.setChecked(true);
                 break;
 
-            case 3: // Opportunistic
+            case ScanSettings.SCAN_MODE_OPPORTUNISTIC: // Opportunistic
                 rbOpportunistic.setChecked(true);
                 break;
         }
@@ -80,7 +78,7 @@ public class SetPeriodFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_LOW_LATENCY);
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, ScanSettings.SCAN_MODE_LOW_LATENCY);
                         Toast.makeText(context_mainActivity, "Scan mode is Low Latency", Toast.LENGTH_SHORT).show();
                     } else if (rbBalanced.isChecked()) {
                         try {
@@ -90,7 +88,7 @@ public class SetPeriodFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_BALANCED);
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, ScanSettings.SCAN_MODE_BALANCED);
                         Toast.makeText(context_mainActivity, "Scan mode is Balanced", Toast.LENGTH_SHORT).show();
                     } else if (rbLowPower.isChecked()) {
                         try {
@@ -100,7 +98,7 @@ public class SetPeriodFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_LOW_POWER);
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, ScanSettings.SCAN_MODE_LOW_POWER);
                         Toast.makeText(context_mainActivity, "Scan mode is Low Power", Toast.LENGTH_SHORT).show();
                     } else if (rbOpportunistic.isChecked()) {
                         try {
@@ -110,7 +108,7 @@ public class SetPeriodFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_OPPORTUNISTIC);
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, ScanSettings.SCAN_MODE_OPPORTUNISTIC);
                         Toast.makeText(context_mainActivity, "Scan mode is Opportunistic", Toast.LENGTH_SHORT).show();
                     }
                 }

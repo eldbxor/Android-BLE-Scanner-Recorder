@@ -35,6 +35,7 @@ import com.example.taek.blescanner_bylyt.Services.BLEScanService;
 import com.example.taek.blescanner_bylyt.Utils.BackPressCloseHandler;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
 import com.example.taek.blescanner_bylyt.Utils.DBHelper;
+import com.example.taek.blescanner_bylyt.Utils.DBUtils;
 import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Navigation header information
     public static TextView tvNavHeadId;
     public static TextView tvNavHeadAddr;
+
+    // Database
+    DBUtils dbUtils;
 
     public void connectMessenger() {
         Log.d(TAG, "connectMessenger(): call connectMessenger");
@@ -79,7 +83,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-
+                try {
+                    fragMain.bLEScanSwitch.setChecked(false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -95,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         initUIElements();
 
+        dbUtils = new DBUtils(this);
 
         // BLE 관련 Permission 주기
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){

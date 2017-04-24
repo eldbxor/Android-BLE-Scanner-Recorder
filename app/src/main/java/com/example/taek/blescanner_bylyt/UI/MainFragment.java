@@ -28,7 +28,7 @@ import java.util.TimerTask;
 public class MainFragment extends Fragment {
     private View rootView;
     public ViewUtils viewUtils;
-    private Switch bLEScanSwitch;
+    public Switch bLEScanSwitch;
     private ProgressBar progressBar;
     private TextView tv_numberOfScannedDevice, tv_ScanResult;
     public Context context_mainActivity;

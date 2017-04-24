@@ -44,7 +44,8 @@ If you want to save scan results for a specific time, you can use the auto close
 
                 <TextView
                     android:autoLink="web"
-                    android:text="https://github.com/eldbxor/BLEScanner_ByLYT"/>
+                    android:layout_weight="1"
+                    android:text="https://github.com/eldbxor/Android-BLE-Scanner-Recorder"/>
             </TableRow>
 
             <TableRow>

@@ -45,6 +45,10 @@ public class IncomingHandler extends android.os.Handler {
                         ((MainActivity) mContext).fragMain.viewUtils.updateViewInfo(beaconData);
 
                         break;
+
+                    case Constants.HANDLE_MESSAGE_TYPE_AUTO_CLOSE_TIME:
+                        ((MainActivity) mContext).fragMain.bLEScanSwitch.setChecked(false);
+                        break;
                 }
                 break;
 

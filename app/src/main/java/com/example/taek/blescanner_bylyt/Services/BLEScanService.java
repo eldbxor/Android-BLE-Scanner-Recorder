@@ -11,13 +11,17 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.taek.blescanner_bylyt.Utils.BLEServiceUtils;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
+import com.example.taek.blescanner_bylyt.Utils.DBUtils;
 import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +44,8 @@ public class BLEScanService extends Service {
     public ArrayList<String[]> arr_beaconData;
     private Timer timer;
     private TimerTask timerTask;
+    private int timerSecond;
+    private int closeSecond;
 
     // Target we publish for clients to send messages to IncomingHandler.
     private Messenger incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_SERVICE, BLEScanService.this));
@@ -74,7 +80,7 @@ public class BLEScanService extends Service {
             if (Build.VERSION.SDK_INT >= 21) {
                 Log.d(TAG, "onCreate(): BLEScanner setting");
                 mBLEServiceUtils.mBLEScanner = mBLEServiceUtils.mBluetoothAdapter.getBluetoothLeScanner();
-                mScanSetting = mBLEServiceUtils.setPeriod(ScanSettings.SCAN_MODE_LOW_LATENCY);
+                mScanSetting = mBLEServiceUtils.setPeriod(DBUtils.scanPeriod); // DB에 저장된 스캔 주기로 설정
                 mScanFilter = new ArrayList<ScanFilter>();
             }
 
@@ -100,7 +106,9 @@ public class BLEScanService extends Service {
             }
 
             timerStart();
-            mBLEServiceUtils.excelWriter.readFile("beacon_data.xls");
+            if (DBUtils.isRecord == Constants.RECORDING_SWITCH_ON) {
+                mBLEServiceUtils.excelWriter.readFile(DBUtils.fileName);
+            }
         }else{
             isScanning = false;
 
@@ -113,7 +121,8 @@ public class BLEScanService extends Service {
             }
 
             timerStop();
-            mBLEServiceUtils.writeExcelFile(true);
+            if (DBUtils.isRecord == Constants.RECORDING_SWITCH_ON)
+                mBLEServiceUtils.writeExcelFile(true);
         }
     }
 
@@ -144,6 +153,7 @@ public class BLEScanService extends Service {
     }
 
     public void timerStart() {
+        timerSecond = 0;
         timer = new Timer();
 
         timerTask = new TimerTask() {
@@ -153,9 +163,30 @@ public class BLEScanService extends Service {
             }
         };
         timer.schedule(timerTask, 1000, 1000);
+
+        // closeSecond 계산
+        if (DBUtils.isAutoClose == Constants.AUTO_CLOSE_SWITCH_ON) {
+            String strHour, strMin, strSec, strAll;
+            int hour, min, sec;
+            strAll = DBUtils.autoCloseTime;
+            if (strAll.equals("000000")) {
+                closeSecond = 60 * 60 * 60;
+            } else {
+                strHour = strAll.substring(0, 2);
+                strMin = strAll.substring(2, 4);
+                strSec = strAll.substring(4);
+                hour = Integer.valueOf(strHour);
+                min = Integer.valueOf(strMin);
+                sec = Integer.valueOf(strSec);
+                closeSecond = sec + (min * 60) + (hour * 60 * 60);
+            }
+        } else {
+            closeSecond = 60 * 60 * 60;
+        }
     }
 
     public void timerStop() {
+        timerSecond = 0;
         timer.cancel();
         timer.purge();
     }
@@ -163,6 +194,16 @@ public class BLEScanService extends Service {
     public void timerArrUpdate() {
         Log.d(TAG, "timerTextUpdate(): send activity beacons's data and clear arr_BeaconData");
         mBLEServiceUtils.sendBeaconDataToActivity(arr_beaconData);
+        timerSecond++;
+
+        if (timerSecond >= closeSecond) { // closeTime이 되어 스캔 종료
+            try {
+                replyToActivityMessenger.send(
+                        Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_AUTO_CLOSE_TIME));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // api 21 이상
@@ -197,8 +238,10 @@ public class BLEScanService extends Service {
             mBLEServiceUtils.addBLEData(deviceName, result.getDevice().getAddress(), separatedData.get(1), separatedData.get(2),
                     separatedData.get(3), separatedData.get(0), String.valueOf(result.getRssi()), getCurrentTime());
 
-            if (mBLEServiceUtils.list_BLEData.size() > 100) {
-                mBLEServiceUtils.writeExcelFile(false);
+            if (DBUtils.isRecord == Constants.RECORDING_SWITCH_ON) {
+                if (mBLEServiceUtils.list_BLEData.size() > 100) {
+                    mBLEServiceUtils.writeExcelFile(false);
+                }
             }
 
             /*
@@ -269,8 +312,10 @@ public class BLEScanService extends Service {
             mBLEServiceUtils.addBLEData(deviceName, device.getAddress(), uuid, String.valueOf(major_int), String.valueOf(minor_int),
                     all, String.valueOf(rssi), getCurrentTime());
 
-            if (mBLEServiceUtils.list_BLEData.size() > 100) {
-                mBLEServiceUtils.writeExcelFile(false);
+            if (DBUtils.isRecord == Constants.RECORDING_SWITCH_ON) {
+                if (mBLEServiceUtils.list_BLEData.size() > 100) {
+                    mBLEServiceUtils.writeExcelFile(false);
+                }
             }
             /*
             // send activity beacon's data from service

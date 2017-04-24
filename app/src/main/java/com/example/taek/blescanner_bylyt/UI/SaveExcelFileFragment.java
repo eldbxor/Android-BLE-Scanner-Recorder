@@ -3,6 +3,7 @@ package com.example.taek.blescanner_bylyt.UI;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class SaveExcelFileFragment extends Fragment {
     public TextView tvExcelFileDirectory;
     public Switch switch_Recording, switch_AutoCloseTimer;
     public EditText editText_fileName, editText_Hours, editText_Minutes, editText_Seconds;
+    private String TAG = "SaveExcelFileFragment";
 
     public SaveExcelFileFragment() {}
 
@@ -54,6 +56,7 @@ public class SaveExcelFileFragment extends Fragment {
         editText_Minutes = (EditText) rootView.findViewById(R.id.editText_Minutes);
         editText_Seconds = (EditText) rootView.findViewById(R.id.editText_Seconds);
 
+        // Database에서 Recording 여부를 가져옴
         switch (DBUtils.isRecord) {
             case Constants.RECORDING_SWITCH_ON:
                 switch_Recording.setChecked(true);
@@ -61,8 +64,36 @@ public class SaveExcelFileFragment extends Fragment {
 
             case Constants.RECORDING_SWITCH_OFF:
                 switch_Recording.setChecked(false);
+                editText_fileName.setEnabled(false);
+                switch_AutoCloseTimer.setEnabled(false);
+                switch_AutoCloseTimer.setChecked(false);
                 break;
         }
+
+        // Database에서 AutoClose 여부를 가져옴
+        switch (DBUtils.isAutoClose) {
+            case Constants.AUTO_CLOSE_SWITCH_ON:
+                switch_AutoCloseTimer.setChecked(true);
+                break;
+
+            case Constants.AUTO_CLOSE_SWITCH_OFF:
+                switch_AutoCloseTimer.setChecked(false);
+                editText_Hours.setEnabled(false);
+                editText_Minutes.setEnabled(false);
+                editText_Seconds.setEnabled(false);
+                break;
+        }
+
+        // Database에서 저장할 파일명을 가져옴
+        if (DBUtils.fileName != null) {
+            editText_fileName.setText(DBUtils.fileName);
+        }
+
+        // Database에서 AutoTime을 가져옴
+        String strAutoCloseTime = DBUtils.autoCloseTime;
+        editText_Hours.setText(strAutoCloseTime.substring(0, 2));
+        editText_Minutes.setText(strAutoCloseTime.substring(2, 4));
+        editText_Seconds.setText(strAutoCloseTime.substring(4));
 
         switch_Recording.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -74,6 +105,7 @@ public class SaveExcelFileFragment extends Fragment {
                 } else {
                     editText_fileName.setEnabled(false);
                     switch_AutoCloseTimer.setEnabled(false);
+                    switch_AutoCloseTimer.setChecked(false);
                     DBUtils.update(Constants.DATABASE_IS_RECORD, Constants.RECORDING_SWITCH_OFF);
                 }
             }
@@ -86,10 +118,12 @@ public class SaveExcelFileFragment extends Fragment {
                     editText_Hours.setEnabled(true);
                     editText_Minutes.setEnabled(true);
                     editText_Seconds.setEnabled(true);
+                    DBUtils.update(Constants.DATABASE_IS_AUTO_CLOSE, Constants.AUTO_CLOSE_SWITCH_ON);
                 } else {
                     editText_Hours.setEnabled(false);
                     editText_Minutes.setEnabled(false);
                     editText_Seconds.setEnabled(false);
+                    DBUtils.update(Constants.DATABASE_IS_AUTO_CLOSE, Constants.AUTO_CLOSE_SWITCH_OFF);
                 }
             }
         });
@@ -98,10 +132,17 @@ public class SaveExcelFileFragment extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    int i = Integer.valueOf(editText_Hours.getText().toString());
-                    if (i < 10) {
+                    int i;
+                    if (editText_Hours.getText().toString().equals("")) {
+                        i = 0;
+                    } else {
+                        i = Integer.valueOf(editText_Hours.getText().toString());
+                    }
+                    if (i < 10 && i != 0) {
                         String str = "0" + String.valueOf(i);
                         editText_Hours.setText(str);
+                    } else if (i == 0) {
+                        editText_Hours.setText("00");
                     }
                 }
             }
@@ -111,10 +152,17 @@ public class SaveExcelFileFragment extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    int i = Integer.valueOf(editText_Minutes.getText().toString());
-                    if (i < 10) {
+                    int i;
+                    if (editText_Minutes.getText().toString().equals("")) {
+                        i = 0;
+                    } else {
+                        i = Integer.valueOf(editText_Minutes.getText().toString());
+                    }
+                    if (i < 10 && i != 0) {
                         String str = "0" + String.valueOf(i);
                         editText_Minutes.setText(str);
+                    } else if (i == 0) {
+                        editText_Minutes.setText("00");
                     }
                 }
             }
@@ -124,15 +172,51 @@ public class SaveExcelFileFragment extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    int i = Integer.valueOf(editText_Seconds.getText().toString());
-                    if (i < 10) {
+                    int i;
+                    if (editText_Seconds.getText().toString().equals("")) {
+                        i = 0;
+                    } else {
+                        i = Integer.valueOf(editText_Seconds.getText().toString());
+                    }
+                    if (i < 10 && i != 0) {
                         String str = "0" + String.valueOf(i);
                         editText_Seconds.setText(str);
+                    } else if (i == 0) {
+                        editText_Seconds.setText("00");
                     }
                 }
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+        if (switch_Recording.isChecked()) {
+            if (!editText_fileName.getText().toString().equals(DBUtils.fileName)) {
+                DBUtils.update(Constants.DATABASE_FILE_NAME, editText_fileName.getText().toString());
+            }
+
+            if (switch_AutoCloseTimer.isChecked()) {
+                String strHour, strMin, strSec, strAutoCloseTime;
+                strHour = editText_Hours.getText().toString();
+                strMin = editText_Minutes.getText().toString();
+                strSec = editText_Seconds.getText().toString();
+                while (strHour.length() < 2) {
+                    strHour = "0" + strHour;
+                }
+                while (strMin.length() < 2) {
+                    strMin = "0" + strMin;
+                }
+                while (strSec.length() < 2) {
+                    strSec = "0" + strSec;
+                }
+                strAutoCloseTime = strHour + strMin + strSec;
+                DBUtils.update(Constants.DATABASE_AUTO_CLOSE_TIME, strAutoCloseTime);
+            }
+        }
     }
 }
