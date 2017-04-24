@@ -19,4 +19,24 @@ public class Constants {
     public static final int HANDLE_MESSAGE_TYPE_BLE_SCAN = 1;
     public static final int HANDLE_MESSAGE_TYPE_STOP_SCAN = 2;
     public static final int HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD = 3;
+
+    // About database
+    public static final int DATABASE_SCAN_PERIOD = 0;
+    public static final int DATABASE_IS_RECORD = 1;
+    public static final int DATABASE_FILE_NAME = 2;
+    public static final int DATABASE_IS_AUTO_CLOSE = 3;
+    public static final int DATABASE_AUTO_CLOSE_TIME = 4;
+
+    public static final int RECORDING_SWITCH_ON = 1;
+    public static final int RECORDING_SWITCH_OFF = 0;
+
+    public static final int AUTO_CLOSE_SWITCH_ON = 1;
+    public static final int AUTO_CLOSE_SWITCH_OFF = 0;
+
+    public static final int SCAN_PERIOD_LOW_LATENCY = 0;
+    public static final int SCAN_PERIOD_BALANCED = 1;
+    public static final int SCAN_PERIOD_LOW_POWER = 2;
+    public static final int SCAN_PERIOD_OPPORTUNISTIC = 3;
+
+
 }

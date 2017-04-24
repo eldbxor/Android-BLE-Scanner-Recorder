@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.taek.blescanner_bylyt.R;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
+import com.example.taek.blescanner_bylyt.Utils.DBUtils;
 
 /**
  * Created by eldbx on 2017-04-21.
@@ -47,43 +48,71 @@ public class SetPeriodFragment extends Fragment {
 
         // ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN));
 
+        switch (DBUtils.scanPeriod) {
+            case 0: // Low Latency
+                rbLowLatency.setChecked(true);
+                break;
+
+            case 1: // Balanced
+                rbBalanced.setChecked(true);
+                break;
+
+            case 2: // Low Power
+                rbLowPower.setChecked(true);
+                break;
+
+            case 3: // Opportunistic
+                rbOpportunistic.setChecked(true);
+                break;
+        }
+
         RadioButton.OnClickListener optionOnClickListener = new RadioButton.OnClickListener() {
             public void onClick(View v) {
-                if (rbLowLatency.isChecked()) {
-                    try {
-                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
-                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_LOW_LATENCY));
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(context_mainActivity, "Scan mode is Low Latency", Toast.LENGTH_SHORT).show();
+                if (!((MainActivity) context_mainActivity).isConnectedService) {
+                    Toast.makeText(context_mainActivity, "Service isn't running", Toast.LENGTH_SHORT).show();
                 }
-                else if (rbBalanced.isChecked()) {
-                    try {
-                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
-                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_BALANCED));
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
+                else {
+                    if (rbLowLatency.isChecked()) {
+                        try {
+                            ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                    Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_LOW_LATENCY));
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_LOW_LATENCY);
+                        Toast.makeText(context_mainActivity, "Scan mode is Low Latency", Toast.LENGTH_SHORT).show();
+                    } else if (rbBalanced.isChecked()) {
+                        try {
+                            ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                    Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_BALANCED));
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_BALANCED);
+                        Toast.makeText(context_mainActivity, "Scan mode is Balanced", Toast.LENGTH_SHORT).show();
+                    } else if (rbLowPower.isChecked()) {
+                        try {
+                            ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                    Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_LOW_POWER));
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_LOW_POWER);
+                        Toast.makeText(context_mainActivity, "Scan mode is Low Power", Toast.LENGTH_SHORT).show();
+                    } else if (rbOpportunistic.isChecked()) {
+                        try {
+                            ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
+                                    Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_OPPORTUNISTIC));
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+
+                        DBUtils.update(Constants.DATABASE_SCAN_PERIOD, Constants.SCAN_PERIOD_OPPORTUNISTIC);
+                        Toast.makeText(context_mainActivity, "Scan mode is Opportunistic", Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(context_mainActivity, "Scan mode is Balanced", Toast.LENGTH_SHORT).show();
-                }
-                else if (rbLowPower.isChecked()) {
-                    try {
-                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
-                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_LOW_POWER));
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(context_mainActivity, "Scan mode is Low Power", Toast.LENGTH_SHORT).show();
-                }
-                else if (rbOpportunistic.isChecked()) {
-                    try {
-                        ((MainActivity) context_mainActivity).mMessenger.send(Message.obtain(null,
-                                Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD, ScanSettings.SCAN_MODE_OPPORTUNISTIC));
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(context_mainActivity, "Scan mode is Opportunistic", Toast.LENGTH_SHORT).show();
                 }
             }
         };

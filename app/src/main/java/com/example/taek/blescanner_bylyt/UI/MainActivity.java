@@ -9,6 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
@@ -31,6 +34,7 @@ import com.example.taek.blescanner_bylyt.R;
 import com.example.taek.blescanner_bylyt.Services.BLEScanService;
 import com.example.taek.blescanner_bylyt.Utils.BackPressCloseHandler;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
+import com.example.taek.blescanner_bylyt.Utils.DBHelper;
 import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ServiceConnection mServiceConnection;
     public Messenger mMessenger;
 
-    private boolean isConnectedService;
+    public boolean isConnectedService;
 
     // Navigation header information
     public static TextView tvNavHeadId;
@@ -91,10 +95,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         initUIElements();
 
-        // switch_scan = (Switch) findViewById(R.id.BLEScanSwitch);
-        // editView_saveData = (TextView) findViewById(R.id.editView_dataName);
-        // checkbox_dataName = (CheckBox) findViewById(R.id.checkBox_saveData);
-        // editView_saveData.setEnabled(false);
 
         // BLE 관련 Permission 주기
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
