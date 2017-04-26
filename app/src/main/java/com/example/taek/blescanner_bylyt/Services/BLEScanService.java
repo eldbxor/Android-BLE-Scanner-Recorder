@@ -162,7 +162,7 @@ public class BLEScanService extends Service {
                 timerArrUpdate();
             }
         };
-        timer.schedule(timerTask, 1000, 1000);
+        timer.schedule(timerTask, 1000, 2000);
 
         // closeSecond 계산
         if (DBUtils.isAutoClose == Constants.AUTO_CLOSE_SWITCH_ON) {
@@ -194,7 +194,7 @@ public class BLEScanService extends Service {
     public void timerArrUpdate() {
         Log.d(TAG, "timerTextUpdate(): send activity beacons's data and clear arr_BeaconData");
         mBLEServiceUtils.sendBeaconDataToActivity(arr_beaconData);
-        timerSecond++;
+        timerSecond += 2;
 
         if (timerSecond >= closeSecond) { // closeTime이 되어 스캔 종료
             try {

@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.taek.blescanner_bylyt.R;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
@@ -102,6 +103,10 @@ public class SaveExcelFileFragment extends Fragment {
                     editText_fileName.setEnabled(true);
                     switch_AutoCloseTimer.setEnabled(true);
                     DBUtils.update(Constants.DATABASE_IS_RECORD, Constants.RECORDING_SWITCH_ON);
+
+                    if (((MainActivity) context_mainActivity).fragMain.isScanning) {
+                        Toast.makeText(context_mainActivity, "Write excel file to the external storage", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     editText_fileName.setEnabled(false);
                     switch_AutoCloseTimer.setEnabled(false);

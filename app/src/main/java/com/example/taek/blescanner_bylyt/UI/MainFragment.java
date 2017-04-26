@@ -13,9 +13,11 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.taek.blescanner_bylyt.R;
 import com.example.taek.blescanner_bylyt.Utils.Constants;
+import com.example.taek.blescanner_bylyt.Utils.DBUtils;
 import com.example.taek.blescanner_bylyt.Utils.ViewUtils;
 
 import java.util.Timer;
@@ -103,6 +105,8 @@ public class MainFragment extends Fragment {
                     timerStart();
                     progressBar.setEnabled(true);
                     progressBar.setVisibility(View.VISIBLE);
+                    if (DBUtils.isRecord == Constants.RECORDING_SWITCH_ON && !isScanning)
+                        Toast.makeText(context_mainActivity, "Write excel file to the external storage", Toast.LENGTH_SHORT).show();
 
                     isScanning = true;
                 }
