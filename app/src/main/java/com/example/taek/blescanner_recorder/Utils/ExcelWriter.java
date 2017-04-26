@@ -1,10 +1,9 @@
-package com.example.taek.blescanner_bylyt.Utils;
+package com.example.taek.blescanner_recorder.Utils;
 
 import android.content.Context;
 import android.util.Log;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -14,12 +13,9 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by eldbx on 2017-04-10.
@@ -72,21 +68,21 @@ public class ExcelWriter {
         }
 
         if ( workbook != null) {
-            Log.d(TAG, "readFile(): read " + this.fileName);
+             Log.d(TAG, "readFile(): read " + this.fileName);
             sheet = workbook.getSheetAt(0);
 
             if (sheet != null) {
                 lastRowNum = sheet.getLastRowNum() + 1;
                 row = sheet.createRow(lastRowNum);
             } else {
-                Log.d(TAG, "readFile(): sheet is null");
+                // Log.d(TAG, "readFile(): sheet is null");
                 sheet = workbook.createSheet();
                 lastRowNum = 0;
                 row = sheet.createRow(lastRowNum);
                 isNewFile = true;
             }
         } else {
-            Log.d(TAG, "readFile(): workbook is null");
+            // Log.d(TAG, "readFile(): workbook is null");
             workbook = new HSSFWorkbook();
             sheet = workbook.createSheet();
             lastRowNum = 0;

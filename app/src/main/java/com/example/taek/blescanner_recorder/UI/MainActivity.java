@@ -1,5 +1,6 @@
-package com.example.taek.blescanner_bylyt.UI;
+package com.example.taek.blescanner_recorder.UI;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -9,9 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
@@ -30,13 +28,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.taek.blescanner_bylyt.R;
-import com.example.taek.blescanner_bylyt.Services.BLEScanService;
-import com.example.taek.blescanner_bylyt.Utils.BackPressCloseHandler;
-import com.example.taek.blescanner_bylyt.Utils.Constants;
-import com.example.taek.blescanner_bylyt.Utils.DBHelper;
-import com.example.taek.blescanner_bylyt.Utils.DBUtils;
-import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
+import com.example.taek.blescanner_recorder.R;
+import com.example.taek.blescanner_recorder.Services.BLEScanService;
+import com.example.taek.blescanner_recorder.Utils.BackPressCloseHandler;
+import com.example.taek.blescanner_recorder.Utils.Constants;
+import com.example.taek.blescanner_recorder.Utils.DBUtils;
+import com.example.taek.blescanner_recorder.Utils.IncomingHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DBUtils dbUtils;
 
     public void connectMessenger() {
-        Log.d(TAG, "connectMessenger(): call connectMessenger");
+        // Log.d(TAG, "connectMessenger(): call connectMessenger");
         ComponentName cn = new ComponentName(context_mainActivity, BLEScanService.class);
         Intent intent = new Intent();
         intent.setComponent(cn);
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                Log.d(TAG, "connectMessenger(): connected to service");
+                // Log.d(TAG, "connectMessenger(): connected to service");
                 isConnectedService = true;
                 mMessenger = new Messenger(service);
 
@@ -132,9 +129,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRequestPermissionsResult(int reqeustCode, String permission[], int[] grantResults){
         switch (reqeustCode){
-            case Constants.PERMISSION_REQUEST_COARSE_LOCATION:{
+            case Constants.PERMISSION_REQUEST_COARSE_LOCATION:
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Log.d("permission", "coarse location permission granted");
+                    // Log.d("permission", "coarse location permission granted");
                 }else{
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Functionality limited");
@@ -149,8 +146,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     });
                     builder.show();
                 }
-                return;
-            }
+                break;
+
+            case Constants.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    // Log.d("permission", "coarse location permission granted");
+                }else{
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Functionality limited");
+                    builder.setMessage("Since write external storage access has not been granted, " +
+                            "this app will not be able to write excel file.");
+                    builder.setPositiveButton("Ok", null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+
+                        }
+                    });
+                    builder.show();
+                }
+                break;
         }
     }
 

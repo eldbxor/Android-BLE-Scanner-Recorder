@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt.UI;
+package com.example.taek.blescanner_recorder.UI;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -15,10 +15,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_bylyt.R;
-import com.example.taek.blescanner_bylyt.Utils.Constants;
-import com.example.taek.blescanner_bylyt.Utils.DBUtils;
-import com.example.taek.blescanner_bylyt.Utils.ViewUtils;
+import com.example.taek.blescanner_recorder.R;
+import com.example.taek.blescanner_recorder.Utils.Constants;
+import com.example.taek.blescanner_recorder.Utils.DBUtils;
+import com.example.taek.blescanner_recorder.Utils.ViewUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -140,14 +140,14 @@ public class MainFragment extends Fragment {
             timerStop();
             timerStart();
         }
-        Log.d(TAG, "called onResume()");
+        // Log.d(TAG, "called onResume()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         isOnUi = false;
-        Log.d(TAG, "called onPause");
+        // Log.d(TAG, "called onPause");
         if (timer != null) {
             timerStop();
         }
@@ -178,9 +178,9 @@ public class MainFragment extends Fragment {
     }
 
     public void timerTextUpdate() {
-        Log.d(TAG, "timerTextUpdate(): inflate beacons's data on MainFragment");
-        Log.d(TAG, "timerTextUpdate(): viewInfos's size = " + String.valueOf(viewUtils.size()) + ", inflatedLayout's children count = " +
-        String.valueOf(viewUtils.inflatedLocation.getChildCount()));
+        // Log.d(TAG, "timerTextUpdate(): inflate beacons's data on MainFragment");
+        // Log.d(TAG, "timerTextUpdate(): viewInfos's size = " + String.valueOf(viewUtils.size()) + ", inflatedLayout's children count = " +
+        // String.valueOf(viewUtils.inflatedLocation.getChildCount()));
         viewUtils.inflateLayout();
 
         // setting a progressBar

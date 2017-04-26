@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.taek.blescanner_bylyt">
+    package="com.example.taek.blescanner_recorder">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".UI.MainActivity">
+        <activity android:name="com.example.taek.blescanner_recorder.UI.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,11 +21,10 @@
         </activity>
 
         <service
-            android:name=".Services.BLEScanService"
+            android:name="com.example.taek.blescanner_recorder.Services.BLEScanService"
             android:enabled="true"
             android:exported="true"></service>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

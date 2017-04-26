@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt.Utils;
+package com.example.taek.blescanner_recorder.Utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -11,7 +11,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.example.taek.blescanner_bylyt.Services.BLEScanService;
+import com.example.taek.blescanner_recorder.Services.BLEScanService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class BLEServiceUtils {
     // send Activity Beacon data from service
     public void sendBeaconDataToActivity(ArrayList<String[]> arr_BeaconData) {
         ArrayList<String[]> temp = (ArrayList<String[]>) arr_BeaconData.clone();
-        Log.d(TAG, "sendBeaconDataToActivity: send arr_BeaconData to activity, arr_BeaconData's size = " + String.valueOf(temp.size()));
+        // Log.d(TAG, "sendBeaconDataToActivity: send arr_BeaconData to activity, arr_BeaconData's size = " + String.valueOf(temp.size()));
 
         if (temp.size() != 0) {
             for (String[] beaconData :temp) {

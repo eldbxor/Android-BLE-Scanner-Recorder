@@ -1,8 +1,9 @@
-package com.example.taek.blescanner_bylyt.UI;
+package com.example.taek.blescanner_recorder.UI;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_bylyt.R;
+import com.example.taek.blescanner_recorder.R;
 
 /**
  * Created by eldbx on 2017-03-25.
@@ -62,6 +63,9 @@ public class SetupFragment extends Fragment {
         button_setupPeriod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Build.VERSION.SDK_INT < 21) {
+                    Toast.makeText(context_mainActivity, "It's only possible over sdk version 21", Toast.LENGTH_SHORT).show();
+                }
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, fragSetPeriod)
                         .detach(fragSetPeriod).attach(fragSetPeriod)

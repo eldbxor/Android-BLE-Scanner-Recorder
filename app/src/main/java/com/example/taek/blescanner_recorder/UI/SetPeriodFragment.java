@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt.UI;
+package com.example.taek.blescanner_recorder.UI;
 
 import android.app.Fragment;
 import android.bluetooth.le.ScanSettings;
@@ -9,13 +9,12 @@ import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_bylyt.R;
-import com.example.taek.blescanner_bylyt.Utils.Constants;
-import com.example.taek.blescanner_bylyt.Utils.DBUtils;
+import com.example.taek.blescanner_recorder.R;
+import com.example.taek.blescanner_recorder.Utils.Constants;
+import com.example.taek.blescanner_recorder.Utils.DBUtils;
 
 /**
  * Created by eldbx on 2017-04-21.

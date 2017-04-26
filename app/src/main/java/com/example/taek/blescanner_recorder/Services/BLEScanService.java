@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt.Services;
+package com.example.taek.blescanner_recorder.Services;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -11,7 +11,6 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -19,10 +18,10 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_bylyt.Utils.BLEServiceUtils;
-import com.example.taek.blescanner_bylyt.Utils.Constants;
-import com.example.taek.blescanner_bylyt.Utils.DBUtils;
-import com.example.taek.blescanner_bylyt.Utils.IncomingHandler;
+import com.example.taek.blescanner_recorder.Utils.BLEServiceUtils;
+import com.example.taek.blescanner_recorder.Utils.Constants;
+import com.example.taek.blescanner_recorder.Utils.DBUtils;
+import com.example.taek.blescanner_recorder.Utils.IncomingHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -192,7 +191,7 @@ public class BLEScanService extends Service {
     }
 
     public void timerArrUpdate() {
-        Log.d(TAG, "timerTextUpdate(): send activity beacons's data and clear arr_BeaconData");
+        // Log.d(TAG, "timerTextUpdate(): send activity beacons's data and clear arr_BeaconData");
         mBLEServiceUtils.sendBeaconDataToActivity(arr_beaconData);
         timerSecond += 2;
 
@@ -221,16 +220,10 @@ public class BLEScanService extends Service {
 
             // public DeviceInfo(BluetoothDevice device, String address, String scanRecord, String uuid, String major, String minor, int rssi)
             // separatedData's index 0: scanRecord, 1: uuid, 2: major, 3: minor
-            /*
-            mBLEServiceUtils.addDeviceInfo(Constants.CALLBACK_TYPE_BLE_SCAN_SERVICE, new DeviceInfo(result.getDevice(), result.getDevice().getAddress(), separatedData.get(0),
-                    separatedData.get(1), separatedData.get(2), separatedData.get(3), result.getRssi()));
-
-            mBLEServiceUtils.setCurrentBeacons(result.getDevice().getAddress(), result.getRssi());
-        */
 
             if (!isContainsBeaconData(result.getDevice().getAddress(), separatedData.get(1))) {
-                Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + result.getDevice().getName() + ", device's address = " + result.getDevice().getAddress() +
-                        separatedData.get(1));
+                // Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + result.getDevice().getName() + ", device's address = " + result.getDevice().getAddress() +
+                //        separatedData.get(1));
                 arr_beaconData.add(new String[]{ deviceName, result.getDevice().getAddress(), separatedData.get(1),
                         separatedData.get(2), separatedData.get(3), separatedData.get(0), String.valueOf(result.getRssi()) });
             }
@@ -243,11 +236,6 @@ public class BLEScanService extends Service {
                     mBLEServiceUtils.writeExcelFile(false);
                 }
             }
-
-            /*
-            // send activity beacon's data from service
-            mBLEServiceUtils.sendBeaconDataToActivity(result.getDevice().getName(), result.getDevice().getAddress(), separatedData.get(1),
-                    separatedData.get(2), separatedData.get(3), separatedData.get(0), result.getRssi()); */
         }
 
         @Override
@@ -293,18 +281,9 @@ public class BLEScanService extends Service {
 
             major_int = (scanRecord[25] & 0xff) * 0x100 + (scanRecord[26] & 0xff);
             minor_int = (scanRecord[27] & 0xff) * 0x100 + (scanRecord[28] & 0xff);
-/*
-            Log.d("AllOfScanRecord", all + ", " + uuid + ", " + String.valueOf(major_int) + ", " + String.valueOf(minor_int));
-*/
-/*
-            mBLEServiceUtils.addDeviceInfo(Constants.CALLBACK_TYPE_BLE_SCAN_SERVICE, new DeviceInfo(device, device.getAddress(), all,
-                    uuid, String.valueOf(major_int), String.valueOf(minor_int), rssi));
-
-            mBLEServiceUtils.setCurrentBeacons(device.getAddress(), rssi);
-*/
 
             if (!isContainsBeaconData(device.getAddress(), uuid)) {
-                Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + device.getName() + ", device's address = " + device.getAddress());
+                // Log.d(TAG, "ScanCallback(): add beacon's data: device's name = " + device.getName() + ", device's address = " + device.getAddress());
                 arr_beaconData.add(new String[]{ deviceName, device.getAddress(), uuid,
                         String.valueOf(major_int), String.valueOf(minor_int), all, String.valueOf(rssi) });
             }
@@ -337,13 +316,13 @@ public class BLEScanService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind()");
+        // Log.d(TAG, "onBind()");
         return incomingMessenger.getBinder();
     }
 
     @Override
     public void onDestroy(){
-        Log.i(TAG, "Service onDestroy");
+        // Log.i(TAG, "Service onDestroy");
         try {
             timerStop();
         } catch (Exception e) {

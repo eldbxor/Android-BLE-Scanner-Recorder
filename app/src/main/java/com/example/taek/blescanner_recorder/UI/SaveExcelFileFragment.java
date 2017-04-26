@@ -1,25 +1,27 @@
-package com.example.taek.blescanner_bylyt.UI;
+package com.example.taek.blescanner_recorder.UI;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_bylyt.R;
-import com.example.taek.blescanner_bylyt.Utils.Constants;
-import com.example.taek.blescanner_bylyt.Utils.DBUtils;
+import com.example.taek.blescanner_recorder.R;
+import com.example.taek.blescanner_recorder.Utils.Constants;
+import com.example.taek.blescanner_recorder.Utils.DBUtils;
 
 /**
  * Created by eldbx on 2017-04-21.
@@ -100,6 +102,24 @@ public class SaveExcelFileFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    // storage 관련 Permission 주기
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (((MainActivity) context_mainActivity).checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(((MainActivity) context_mainActivity));
+                            builder.setTitle("This app needs write external storage access");
+                            builder.setMessage("Please grant write external storage access so this app can write excel file.");
+                            builder.setPositiveButton("Ok", null);
+                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @SuppressLint("NewApi")
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+                                }
+                            });
+                            builder.show();
+                        }
+                    }
+
                     editText_fileName.setEnabled(true);
                     switch_AutoCloseTimer.setEnabled(true);
                     DBUtils.update(Constants.DATABASE_IS_RECORD, Constants.RECORDING_SWITCH_ON);
@@ -199,7 +219,7 @@ public class SaveExcelFileFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy()");
+        // Log.d(TAG, "onDestroy()");
         if (switch_Recording.isChecked()) {
             if (!editText_fileName.getText().toString().equals(DBUtils.fileName)) {
                 DBUtils.update(Constants.DATABASE_FILE_NAME, editText_fileName.getText().toString());

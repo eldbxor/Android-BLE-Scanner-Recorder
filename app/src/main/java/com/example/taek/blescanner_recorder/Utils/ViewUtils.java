@@ -1,17 +1,9 @@
-package com.example.taek.blescanner_bylyt.Utils;
+package com.example.taek.blescanner_recorder.Utils;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
-import com.example.taek.blescanner_bylyt.R;
-
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -52,7 +44,7 @@ public class ViewUtils {
                 for (int i = 0; i < inflatedLocation.getChildCount(); i++) {
                     LinearLayout childLayout = (LinearLayout) inflatedLocation.getChildAt(i);
                     if (viewInfo.childLayout.equals(childLayout)) {
-                        Log.d("childLayout", "already exist");
+                        // Log.d("childLayout", "already exist");
                         exist = true;
                     }
                 }

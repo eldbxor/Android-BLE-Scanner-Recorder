@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt.Utils;
+package com.example.taek.blescanner_recorder.Utils;
 
 import android.bluetooth.le.ScanSettings;
 import android.content.ContentValues;
@@ -27,11 +27,11 @@ public class DBUtils {
         helper = new DBHelper(context);
         try {
             db = helper.getWritableDatabase();
-            Log.d(TAG, "getWritableDatabase() 호출");
+            // Log.d(TAG, "getWritableDatabase() 호출");
             // 데이터베이스 객체를  얻기 위하여 getWritableDatabase()를 호출
         } catch (SQLiteException e) {
             db = helper.getReadableDatabase();
-            Log.d(TAG, "getReadableDatabase() 호출");
+            // Log.d(TAG, "getReadableDatabase() 호출");
         }
         Cursor cursor = db.rawQuery("SELECT scan_period, is_record, file_name, is_auto_close, auto_close_time FROM setting " +
                 "WHERE _id='" + 1 + "';", null);
@@ -59,9 +59,9 @@ public class DBUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "cursor's count = " + String.valueOf(cursor.getCount()));
-        Log.d(TAG, "scanPeriod = " + String.valueOf(scanPeriod) + ", isRecord = " + String.valueOf(isRecord) + ", fileName = " +
-                fileName + ", isAutoClose = " + String.valueOf(isAutoClose) + ", autoCloseTime = " + autoCloseTime);
+        // Log.d(TAG, "cursor's count = " + String.valueOf(cursor.getCount()));
+        // Log.d(TAG, "scanPeriod = " + String.valueOf(scanPeriod) + ", isRecord = " + String.valueOf(isRecord) + ", fileName = " +
+        //         fileName + ", isAutoClose = " + String.valueOf(isAutoClose) + ", autoCloseTime = " + autoCloseTime);
         cursor.close();
     }
 

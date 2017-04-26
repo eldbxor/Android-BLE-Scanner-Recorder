@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt;
+package com.example.taek.blescanner_recorder;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

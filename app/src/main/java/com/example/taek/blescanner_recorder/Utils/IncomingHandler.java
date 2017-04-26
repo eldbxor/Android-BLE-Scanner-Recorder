@@ -1,13 +1,11 @@
-package com.example.taek.blescanner_bylyt.Utils;
+package com.example.taek.blescanner_recorder.Utils;
 
 import android.content.Context;
 import android.os.Message;
 import android.util.Log;
 
-import com.example.taek.blescanner_bylyt.Services.BLEScanService;
-import com.example.taek.blescanner_bylyt.UI.MainActivity;
-
-import java.util.ArrayList;
+import com.example.taek.blescanner_recorder.Services.BLEScanService;
+import com.example.taek.blescanner_recorder.UI.MainActivity;
 
 /**
  * Created by eldbx on 2017-03-07.
@@ -41,7 +39,7 @@ public class IncomingHandler extends android.os.Handler {
                          */
                         // ArrayList arr = (ArrayList) msg.obj;
                         String[] beaconData = (String[]) msg.obj;
-                        Log.d(TAG, "handleMessageTypeActivity: receive beacon's data");
+                        // Log.d(TAG, "handleMessageTypeActivity: receive beacon's data");
                         ((MainActivity) mContext).fragMain.viewUtils.updateViewInfo(beaconData);
 
                         break;
@@ -58,7 +56,7 @@ public class IncomingHandler extends android.os.Handler {
                 BLEScanService mBLEScanService = (BLEScanService) mContext;
                 switch (msg.what) {
                     case Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN:
-                        Log.d(TAG, "Service received handleMessage: BLE Scan");
+                        // Log.d(TAG, "Service received handleMessage: BLE Scan");
                         mBLEScanService.scanBLEDevice(true);
 
                         // 최초에 Activity에 응답하기 위한 Messenger 등록
@@ -69,13 +67,13 @@ public class IncomingHandler extends android.os.Handler {
                         break;
 
                     case Constants.HANDLE_MESSAGE_TYPE_STOP_SCAN:
-                        Log.d(TAG, "Service received handleMessage: stop scan");
+                        // Log.d(TAG, "Service received handleMessage: stop scan");
                         mBLEScanService.scanBLEDevice(false);
 
                         break;
 
                     case Constants.HANDLE_MESSAGE_TYPE_CHANGE_THE_SCANNING_PERIOD:
-                        Log.d(TAG, "Service received handleMessage: change the scanning period");
+                        // Log.d(TAG, "Service received handleMessage: change the scanning period");
                         int scanMode = (int) msg.obj;
                         if (((BLEScanService) mContext).isScanning) {
                             ((BLEScanService) mContext).restartScan(scanMode);

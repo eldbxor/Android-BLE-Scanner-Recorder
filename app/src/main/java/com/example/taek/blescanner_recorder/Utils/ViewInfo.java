@@ -1,8 +1,7 @@
-package com.example.taek.blescanner_bylyt.Utils;
+package com.example.taek.blescanner_recorder.Utils;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,7 +9,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.taek.blescanner_bylyt.R;
+import com.example.taek.blescanner_recorder.R;
 
 /**
  * Created by eldbx on 2017-03-26.

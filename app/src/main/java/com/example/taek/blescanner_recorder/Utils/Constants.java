@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_bylyt.Utils;
+package com.example.taek.blescanner_recorder.Utils;
 
 /**
  * Created by eldbx on 2017-03-07.
@@ -7,6 +7,8 @@ package com.example.taek.blescanner_bylyt.Utils;
 public class Constants {
     // Permission request code
     public static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    public static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 2;
+    public static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
 
     // Handler를 생성한 컴포넌트
     public static final int HANDLER_TYPE_ACTIVITY = 1;
