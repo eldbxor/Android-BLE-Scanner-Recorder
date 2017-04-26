@@ -69,9 +69,11 @@ public class BLEServiceUtils {
 
     // send Activity Beacon data from service
     public void sendBeaconDataToActivity(ArrayList<String[]> arr_BeaconData) {
-        Log.d(TAG, "sendBeaconDataToActivity: send arr_BeaconData to activity, arr_BeaconData's size = " + String.valueOf(arr_BeaconData.size()));
-        if (arr_BeaconData.size() != 0) {
-            for (String[] beaconData : arr_BeaconData) {
+        ArrayList<String[]> temp = (ArrayList<String[]>) arr_BeaconData.clone();
+        Log.d(TAG, "sendBeaconDataToActivity: send arr_BeaconData to activity, arr_BeaconData's size = " + String.valueOf(temp.size()));
+
+        if (temp.size() != 0) {
+            for (String[] beaconData :temp) {
                 try {
                     ((BLEScanService) context_BLEScanService).replyToActivityMessenger.send(
                             Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_SEND_ACTIVITY_BLE_DATA, beaconData));

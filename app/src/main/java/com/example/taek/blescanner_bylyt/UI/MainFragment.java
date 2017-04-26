@@ -165,7 +165,7 @@ public class MainFragment extends Fragment {
                 }
             }
         };
-        timer.schedule(timerTask, 1000, 1000);
+        timer.schedule(timerTask, 1000, 2000);
     }
 
     public void timerStop() {

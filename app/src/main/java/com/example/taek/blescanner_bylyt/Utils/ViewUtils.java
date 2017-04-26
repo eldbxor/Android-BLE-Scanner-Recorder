@@ -37,7 +37,7 @@ public class ViewUtils {
             boolean exist = false;
             viewInfo.removeCount++;
 
-            if (viewInfo.removeCount > 8) { // 비콘 데이터가 5번 이상 스캔되지 않으면 레이아웃에서 삭제
+            if (viewInfo.removeCount > 5) { // 비콘 데이터가 5번 이상 스캔되지 않으면 레이아웃에서 삭제
                 for (int i = 0; i < inflatedLocation.getChildCount(); i++) {
                     LinearLayout childLayout = (LinearLayout) inflatedLocation.getChildAt(i);
                     if (viewInfo.childLayout.equals(childLayout)) {
