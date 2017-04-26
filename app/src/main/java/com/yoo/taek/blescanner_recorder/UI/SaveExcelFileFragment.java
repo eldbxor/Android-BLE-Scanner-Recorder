@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.UI;
+package com.yoo.taek.blescanner_recorder.UI;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_recorder.R;
-import com.example.taek.blescanner_recorder.Utils.Constants;
-import com.example.taek.blescanner_recorder.Utils.DBUtils;
+import com.yoo.taek.blescanner_recorder.R;
+import com.yoo.taek.blescanner_recorder.Utils.Constants;
+import com.yoo.taek.blescanner_recorder.Utils.DBUtils;
 
 /**
  * Created by eldbx on 2017-04-21.

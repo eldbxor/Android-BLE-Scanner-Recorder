@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.UI;
+package com.yoo.taek.blescanner_recorder.UI;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_recorder.R;
+import com.yoo.taek.blescanner_recorder.R;
 
 /**
  * Created by eldbx on 2017-03-25.

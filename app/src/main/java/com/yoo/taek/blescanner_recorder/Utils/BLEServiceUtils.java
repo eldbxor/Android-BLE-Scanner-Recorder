@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.Utils;
+package com.yoo.taek.blescanner_recorder.Utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -11,7 +11,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.example.taek.blescanner_recorder.Services.BLEScanService;
+import com.yoo.taek.blescanner_recorder.Services.BLEScanService;
 
 import java.util.ArrayList;
 import java.util.List;

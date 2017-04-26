@@ -1,11 +1,10 @@
-package com.example.taek.blescanner_recorder.Utils;
+package com.yoo.taek.blescanner_recorder.Utils;
 
 import android.content.Context;
 import android.os.Message;
-import android.util.Log;
 
-import com.example.taek.blescanner_recorder.Services.BLEScanService;
-import com.example.taek.blescanner_recorder.UI.MainActivity;
+import com.yoo.taek.blescanner_recorder.Services.BLEScanService;
+import com.yoo.taek.blescanner_recorder.UI.MainActivity;
 
 /**
  * Created by eldbx on 2017-03-07.

@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.Utils;
+package com.yoo.taek.blescanner_recorder.Utils;
 
 /**
  * Created by Taek on 2017-04-10.

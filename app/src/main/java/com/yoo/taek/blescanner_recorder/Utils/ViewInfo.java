@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.Utils;
+package com.yoo.taek.blescanner_recorder.Utils;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -9,7 +9,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.taek.blescanner_recorder.R;
+import com.yoo.taek.blescanner_recorder.R;
 
 /**
  * Created by eldbx on 2017-03-26.

@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.Services;
+package com.yoo.taek.blescanner_recorder.Services;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -18,10 +18,10 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_recorder.Utils.BLEServiceUtils;
-import com.example.taek.blescanner_recorder.Utils.Constants;
-import com.example.taek.blescanner_recorder.Utils.DBUtils;
-import com.example.taek.blescanner_recorder.Utils.IncomingHandler;
+import com.yoo.taek.blescanner_recorder.Utils.BLEServiceUtils;
+import com.yoo.taek.blescanner_recorder.Utils.Constants;
+import com.yoo.taek.blescanner_recorder.Utils.DBUtils;
+import com.yoo.taek.blescanner_recorder.Utils.IncomingHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

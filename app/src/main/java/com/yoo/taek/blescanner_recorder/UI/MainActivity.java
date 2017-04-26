@@ -1,6 +1,5 @@
-package com.example.taek.blescanner_recorder.UI;
+package com.yoo.taek.blescanner_recorder.UI;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -22,18 +21,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.taek.blescanner_recorder.R;
-import com.example.taek.blescanner_recorder.Services.BLEScanService;
-import com.example.taek.blescanner_recorder.Utils.BackPressCloseHandler;
-import com.example.taek.blescanner_recorder.Utils.Constants;
-import com.example.taek.blescanner_recorder.Utils.DBUtils;
-import com.example.taek.blescanner_recorder.Utils.IncomingHandler;
+import com.yoo.taek.blescanner_recorder.R;
+import com.yoo.taek.blescanner_recorder.Services.BLEScanService;
+import com.yoo.taek.blescanner_recorder.Utils.BackPressCloseHandler;
+import com.yoo.taek.blescanner_recorder.Utils.Constants;
+import com.yoo.taek.blescanner_recorder.Utils.DBUtils;
+import com.yoo.taek.blescanner_recorder.Utils.IncomingHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

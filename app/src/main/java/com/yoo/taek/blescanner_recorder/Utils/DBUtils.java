@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.Utils;
+package com.yoo.taek.blescanner_recorder.Utils;
 
 import android.bluetooth.le.ScanSettings;
 import android.content.ContentValues;
@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
 
 /**
  * Created by eldbx on 2017-04-24.

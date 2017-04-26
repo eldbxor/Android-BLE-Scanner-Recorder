@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.UI;
+package com.yoo.taek.blescanner_recorder.UI;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.taek.blescanner_recorder.R;
+import com.yoo.taek.blescanner_recorder.R;
 
 /**
  * Created by eldbx on 2017-04-21.

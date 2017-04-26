@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.UI;
+package com.yoo.taek.blescanner_recorder.UI;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -15,10 +15,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.taek.blescanner_recorder.R;
-import com.example.taek.blescanner_recorder.Utils.Constants;
-import com.example.taek.blescanner_recorder.Utils.DBUtils;
-import com.example.taek.blescanner_recorder.Utils.ViewUtils;
+import com.yoo.taek.blescanner_recorder.R;
+import com.yoo.taek.blescanner_recorder.Utils.Constants;
+import com.yoo.taek.blescanner_recorder.Utils.DBUtils;
+import com.yoo.taek.blescanner_recorder.Utils.ViewUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;

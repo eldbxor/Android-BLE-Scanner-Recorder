@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder.Utils;
+package com.yoo.taek.blescanner_recorder.Utils;
 
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;

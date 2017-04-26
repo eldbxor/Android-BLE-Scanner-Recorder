@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
-        applicationId "com.example.taek.blescanner_recorder"
+        applicationId "com.yoo.taek.blescanner_recorder"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1

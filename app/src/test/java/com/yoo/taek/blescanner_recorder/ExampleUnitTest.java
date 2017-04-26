@@ -1,4 +1,4 @@
-package com.example.taek.blescanner_recorder;
+package com.yoo.taek.blescanner_recorder;
 
 import org.junit.Test;
 
