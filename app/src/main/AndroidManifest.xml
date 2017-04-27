@@ -24,7 +24,11 @@
             android:name="com.yoo.taek.blescanner_recorder.Services.BLEScanService"
             android:enabled="true"
             android:exported="true"></service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="13ea0c0a3fca8744883731b224f6d0d69188f708" />
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

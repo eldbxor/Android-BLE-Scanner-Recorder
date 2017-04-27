@@ -26,12 +26,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.yoo.taek.blescanner_recorder.R;
 import com.yoo.taek.blescanner_recorder.Services.BLEScanService;
 import com.yoo.taek.blescanner_recorder.Utils.BackPressCloseHandler;
 import com.yoo.taek.blescanner_recorder.Utils.Constants;
 import com.yoo.taek.blescanner_recorder.Utils.DBUtils;
 import com.yoo.taek.blescanner_recorder.Utils.IncomingHandler;
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         isConnectedService = false;
