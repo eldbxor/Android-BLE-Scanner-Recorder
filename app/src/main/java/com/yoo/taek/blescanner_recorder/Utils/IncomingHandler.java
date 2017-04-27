@@ -2,6 +2,7 @@ package com.yoo.taek.blescanner_recorder.Utils;
 
 import android.content.Context;
 import android.os.Message;
+import android.util.Log;
 
 import com.yoo.taek.blescanner_recorder.Services.BLEScanService;
 import com.yoo.taek.blescanner_recorder.UI.MainActivity;
@@ -43,7 +44,7 @@ public class IncomingHandler extends android.os.Handler {
 
                         break;
 
-                    case Constants.HANDLE_MESSAGE_TYPE_AUTO_CLOSE_TIME:
+                    case Constants.HANDLE_MESSAGE_TYPE_STOP_SERVICE:
                         ((MainActivity) mContext).fragMain.bLEScanSwitch.setChecked(false);
                         break;
                 }
@@ -55,14 +56,14 @@ public class IncomingHandler extends android.os.Handler {
                 BLEScanService mBLEScanService = (BLEScanService) mContext;
                 switch (msg.what) {
                     case Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN:
-                        // Log.d(TAG, "Service received handleMessage: BLE Scan");
-                        mBLEScanService.scanBLEDevice(true);
-
+                        Log.d(TAG, "Service received handleMessage: BLE Scan");
                         // 최초에 Activity에 응답하기 위한 Messenger 등록
                         if (!((BLEScanService) mContext).isConnectedMessenger) {
                             ((BLEScanService) mContext).replyToActivityMessenger = msg.replyTo;
                             ((BLEScanService) mContext).isConnectedMessenger = true;
                         }
+
+                        mBLEScanService.scanBLEDevice(true);
                         break;
 
                     case Constants.HANDLE_MESSAGE_TYPE_STOP_SCAN:

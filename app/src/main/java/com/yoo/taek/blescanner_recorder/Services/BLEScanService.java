@@ -11,6 +11,7 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -65,32 +66,36 @@ public class BLEScanService extends Service {
         mBLEServiceUtils.createBluetoothAdapter(getSystemService(this.BLUETOOTH_SERVICE)); // Bluetooth Adapter 생성
         mBLEServiceUtils.enableBluetooth(); // Bluetooth 사용
 
-        // waiting for stating bluetooth on
-        try{
-            do {
-                Log.d(TAG, "onCreate(): waiting for stating bluetooth on");
-                Thread.sleep(100);
-            } while (mBLEServiceUtils.mBluetoothAdapter.getState() != mBLEServiceUtils.mBluetoothAdapter.STATE_ON);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
-
-        if (mBLEServiceUtils.mBluetoothAdapter != null) { // && mBluetoothAdapter.isEnabled()){
-            if (Build.VERSION.SDK_INT >= 21) {
-                Log.d(TAG, "onCreate(): BLEScanner setting");
-                mBLEServiceUtils.mBLEScanner = mBLEServiceUtils.mBluetoothAdapter.getBluetoothLeScanner();
-                mScanSetting = mBLEServiceUtils.setPeriod(DBUtils.scanPeriod); // DB에 저장된 스캔 주기로 설정
-                mScanFilter = new ArrayList<ScanFilter>();
+        if (mBLEServiceUtils.mBluetoothAdapter != null) { // Bluetooth를 사용 가능한 기기일 때
+            // waiting for stating bluetooth on
+            try {
+                do {
+                    Log.d(TAG, "onCreate(): waiting for stating bluetooth on");
+                    Thread.sleep(100);
+                }
+                while (mBLEServiceUtils.mBluetoothAdapter.getState() != mBLEServiceUtils.mBluetoothAdapter.STATE_ON);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
-            // BLEScanner 객체 확인
-            if (mBLEServiceUtils.mBLEScanner == null && Build.VERSION.SDK_INT >= 21) {
-                Log.d(TAG, "onCreate(): mBLEScanner is null");
-                Toast.makeText(serviceContext, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
+            if (mBLEServiceUtils.mBluetoothAdapter != null) { // && mBluetoothAdapter.isEnabled()){
+                if (Build.VERSION.SDK_INT >= 21) {
+                    Log.d(TAG, "onCreate(): BLEScanner setting");
+                    mBLEServiceUtils.mBLEScanner = mBLEServiceUtils.mBluetoothAdapter.getBluetoothLeScanner();
+                    mScanSetting = mBLEServiceUtils.setPeriod(DBUtils.scanPeriod); // DB에 저장된 스캔 주기로 설정
+                    mScanFilter = new ArrayList<ScanFilter>();
+                }
 
+                // BLEScanner 객체 확인
+                if (mBLEServiceUtils.mBLEScanner == null && Build.VERSION.SDK_INT >= 21) {
+                    Log.d(TAG, "onCreate(): mBLEScanner is null");
+                    Toast.makeText(serviceContext, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        } else {
+            Toast.makeText(serviceContext, "Can not use bluetooth", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void scanBLEDevice(final boolean enable) {
@@ -99,9 +104,15 @@ public class BLEScanService extends Service {
 
             if (Build.VERSION.SDK_INT < 21) {
                 // 롤리팝 이전버전
-                mBLEServiceUtils.mBluetoothAdapter.startLeScan(mLeScanCallback);
+                if (mBLEServiceUtils.mBluetoothAdapter != null)
+                    mBLEServiceUtils.mBluetoothAdapter.startLeScan(mLeScanCallback);
+                else
+                    return;
             } else{
-                mBLEServiceUtils.mBLEScanner.startScan(null, mScanSetting, mScanCallback);
+                if (mBLEServiceUtils.mBLEScanner != null)
+                    mBLEServiceUtils.mBLEScanner.startScan(null, mScanSetting, mScanCallback);
+                else
+                    return;
             }
 
             timerStart();
@@ -113,10 +124,16 @@ public class BLEScanService extends Service {
 
             if (Build.VERSION.SDK_INT < 21) {
                 // 롤리팝 이전버전
-                mBLEServiceUtils.mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                if (mBLEServiceUtils.mBluetoothAdapter != null)
+                    mBLEServiceUtils.mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                else
+                    return;
             } else{
-                mBLEServiceUtils.mBLEScanner.stopScan(mScanCallback);
-                mScanFilter.clear();
+                if (mBLEServiceUtils.mBLEScanner != null) {
+                    mBLEServiceUtils.mBLEScanner.stopScan(mScanCallback);
+                    mScanFilter.clear();
+                } else
+                    return;
             }
 
             timerStop();
@@ -198,7 +215,7 @@ public class BLEScanService extends Service {
         if (timerSecond >= closeSecond) { // closeTime이 되어 스캔 종료
             try {
                 replyToActivityMessenger.send(
-                        Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_AUTO_CLOSE_TIME));
+                        Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_STOP_SERVICE));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -206,7 +223,7 @@ public class BLEScanService extends Service {
     }
 
     // api 21 이상
-    @SuppressLint("NewApi")
+    @SuppressLint("all")
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
@@ -322,7 +339,7 @@ public class BLEScanService extends Service {
 
     @Override
     public void onDestroy(){
-        // Log.i(TAG, "Service onDestroy");
+        Log.i(TAG, "Service onDestroy");
         try {
             timerStop();
         } catch (Exception e) {

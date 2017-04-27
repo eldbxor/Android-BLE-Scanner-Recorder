@@ -43,9 +43,11 @@ public class BLEServiceUtils {
     }
 
     public void enableBluetooth(){
-        if(!mBluetoothAdapter.isEnabled()){
-            mBluetoothAdapter.enable();
-            Log.d(TAG, "enableBluetooth():  BluetoothAdapter 실행");
+        if (mBluetoothAdapter != null) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                mBluetoothAdapter.enable();
+                Log.d(TAG, "enableBluetooth():  BluetoothAdapter 실행");
+            }
         }
     }
 
