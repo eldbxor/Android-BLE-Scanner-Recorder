@@ -119,9 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_ACTIVITY, context_mainActivity));
-
-            backPressCloseHandler = new BackPressCloseHandler(this);
         }
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
     }
 
     @Override

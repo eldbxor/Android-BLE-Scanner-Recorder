@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingTop="20dp"
-        android:text="The excel file's extension is '.xml' and the file is placed inside "/>
+        android:text="The excel file's extension is '.xls' and the file is placed inside "/>
 
     <TextView
         android:layout_width="match_parent"
