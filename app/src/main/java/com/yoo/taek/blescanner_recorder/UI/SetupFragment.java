@@ -47,7 +47,7 @@ public class SetupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_setup, container, false);
 
-        fragmentManager = ((MainActivity) context_mainActivity).getFragmentManager();
+        fragmentManager = getActivity().getFragmentManager();
 
         fragSetPeriod = new SetPeriodFragment();
         fragSaveExcelFile = new SaveExcelFileFragment();

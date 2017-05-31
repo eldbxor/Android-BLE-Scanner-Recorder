@@ -79,6 +79,6 @@ If you want to save scan results for a specific time, you can use the auto close
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:text="Version 1.0.2"/>
+            android:text="Version 1.0.3"/>
     </LinearLayout>
 </LinearLayout>
