@@ -70,6 +70,7 @@ public class BLEServiceUtils {
     }
 
     // send Activity Beacon data from service
+/*
     public void sendBeaconDataToActivity(ArrayList<String[]> arr_BeaconData) {
         ArrayList<String[]> temp = (ArrayList<String[]>) arr_BeaconData.clone();
         // Log.d(TAG, "sendBeaconDataToActivity: send arr_BeaconData to activity, arr_BeaconData's size = " + String.valueOf(temp.size()));
@@ -88,6 +89,7 @@ public class BLEServiceUtils {
             ((BLEScanService) context_BLEScanService).arr_beaconData.clear();
         }
     }
+*/
 
     // uuid, major, minor 나누는 메서드
     public List<String> separate(byte[] scanRecord) {

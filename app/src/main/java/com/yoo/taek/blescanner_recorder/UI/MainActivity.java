@@ -11,9 +11,6 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +29,7 @@ import com.yoo.taek.blescanner_recorder.Services.BLEScanService;
 import com.yoo.taek.blescanner_recorder.Utils.BackPressCloseHandler;
 import com.yoo.taek.blescanner_recorder.Utils.Constants;
 import com.yoo.taek.blescanner_recorder.Utils.DBUtils;
-import com.yoo.taek.blescanner_recorder.Utils.IncomingHandler;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,13 +37,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Close the app when back button twice pressed
     private BackPressCloseHandler backPressCloseHandler;
 
-    private Context context_mainActivity = this;
+    private Context mContext = this;
     private String TAG = "MainActiviy";
-    private Messenger incomingMessenger;
-    private ServiceConnection mServiceConnection;
-    public Messenger mMessenger;
 
-    public boolean isConnectedService;
 
     // Navigation header information
     public static TextView tvNavHeadId;
@@ -55,49 +48,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Database
     DBUtils dbUtils;
 
-    public void connectMessenger() {
-        // Log.d(TAG, "connectMessenger(): call connectMessenger");
-        ComponentName cn = new ComponentName(context_mainActivity, BLEScanService.class);
-        Intent intent = new Intent();
-        intent.setComponent(cn);
-
-        mServiceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                // Log.d(TAG, "connectMessenger(): connected to service");
-                isConnectedService = true;
-                mMessenger = new Messenger(service);
-
-                // start BLE scanning
-                try {
-                    Message msg = Message.obtain(null, Constants.HANDLE_MESSAGE_TYPE_BLE_SCAN);
-                    msg.replyTo = incomingMessenger;
-                    mMessenger.send(msg);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                try {
-                    fragMain.bLEScanSwitch.setChecked(false);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        context_mainActivity.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
-
-        isConnectedService = false;
 
         initUIElements();
 
@@ -120,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
                 builder.show();
             }
-
-            incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_ACTIVITY, context_mainActivity));
         }
 
         backPressCloseHandler = new BackPressCloseHandler(this);
@@ -173,7 +127,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+//        Intent intent = new Intent(this, BLEScanService.class);
+//        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+/*
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+*/
+    }
+/*
+
+    BLEScanService mService;
+    boolean mBound = false;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            BLEScanService.ServiceBinder binder = (BLEScanService.ServiceBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = true;
+        }
+    };
+*/
 
 
     /* DrawerLayout object */
@@ -193,9 +178,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Fragments
         fragMain = new MainFragment();
-        fragMain.sendContext(context_mainActivity);
+        fragMain.sendContext(mContext);
         fragSetup = new SetupFragment();
-        fragSetup.sendContext(context_mainActivity);
+        fragSetup.sendContext(mContext);
 
         // DrawerLayout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -303,7 +288,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (isConnectedService)
-            context_mainActivity.unbindService(mServiceConnection);
     }
 }

@@ -10,11 +10,10 @@ import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 import com.yoo.taek.blescanner_recorder.Utils.BLEServiceUtils;
 import com.yoo.taek.blescanner_recorder.Utils.Constants;
 import com.yoo.taek.blescanner_recorder.Utils.DBUtils;
-import com.yoo.taek.blescanner_recorder.Utils.IncomingHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,18 +35,14 @@ public class BLEScanService extends Service {
     private List<ScanFilter> mScanFilter;
     private String TAG = "BLEScanService";
     public BLEServiceUtils mBLEServiceUtils;
-    private Context serviceContext;
-    public Messenger replyToActivityMessenger; // Activity에 응답하기 위한 Messenger
-    public boolean isConnectedMessenger; // Activity와 Service가 연결되었는지 확인
+    private Context mContext;
     public boolean isScanning; // 스캔 중인지 확인
     public ArrayList<String[]> arr_beaconData;
     private Timer timer;
     private TimerTask timerTask;
     private int timerSecond;
     private int closeSecond;
-
-    // Target we publish for clients to send messages to IncomingHandler.
-    private Messenger incomingMessenger = new Messenger(new IncomingHandler(Constants.HANDLER_TYPE_SERVICE, BLEScanService.this));
+    private ServiceCallback mCallback;
 
     public BLEScanService() {
     }
@@ -56,11 +50,10 @@ public class BLEScanService extends Service {
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate(): service start");
-        serviceContext = this;
-        mBLEServiceUtils = new BLEServiceUtils(serviceContext);
+        mContext = this;
+        mBLEServiceUtils = new BLEServiceUtils(mContext);
         mScanFilter = new ArrayList<>();
         arr_beaconData = new ArrayList<>();
-        isConnectedMessenger = false;
         isScanning = false;
 
         mBLEServiceUtils.createBluetoothAdapter(getSystemService(this.BLUETOOTH_SERVICE)); // Bluetooth Adapter 생성
@@ -89,13 +82,18 @@ public class BLEScanService extends Service {
                 // BLEScanner 객체 확인
                 if (mBLEServiceUtils.mBLEScanner == null && Build.VERSION.SDK_INT >= 21) {
                     Log.d(TAG, "onCreate(): mBLEScanner is null");
-                    Toast.makeText(serviceContext, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
         } else {
-            Toast.makeText(serviceContext, "Can not use bluetooth", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Can not use bluetooth", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
     }
 
     public void scanBLEDevice(final boolean enable) {
@@ -331,10 +329,17 @@ public class BLEScanService extends Service {
         return strDate;
     }
 
+    private final IBinder mBinder = new ServiceBinder(); // Binder given for clients
+    public class ServiceBinder extends Binder {
+        public BLEScanService getService() {
+            return BLEScanService.this;
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         // Log.d(TAG, "onBind()");
-        return incomingMessenger.getBinder();
+        return mBinder;
     }
 
     @Override
